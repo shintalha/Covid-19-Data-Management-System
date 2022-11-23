@@ -21,7 +21,7 @@ def insert_row(cols: list, conn, cursor):
 conn = psycopg2.connect(database="postgres",
                         host="localhost",
                         user="postgres",
-                        password="tnmm",
+                        password="1234",
                         port="5432")
 cursor = conn.cursor()
 
