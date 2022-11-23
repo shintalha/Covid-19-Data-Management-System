@@ -13,7 +13,7 @@ query = """CREATE TABLE Locations (
 conn = psycopg2.connect(database="postgres",
                         host="localhost",
                         user="postgres",
-                        password="1234",
+                        password="tnmm",
                         port="5432")
 cursor = conn.cursor()
 cursor.execute(query)
