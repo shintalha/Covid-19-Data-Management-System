@@ -10,13 +10,12 @@ def insert_row(cols: list, conn, cursor):
     for idx, row in dataset_df.iterrows():
         insert_dict = dict()
         for col in cols:
-            insert_dict[col] = row[col]
+            if pd.isna(row[col]):
+                insert_dict[col] = None
+            else:
+                insert_dict[col] = row[col]
         cursor.execute(query, insert_dict)
         conn.commit()
-
-
-
-
 
 conn = psycopg2.connect(database="postgres",
                         host="localhost",
