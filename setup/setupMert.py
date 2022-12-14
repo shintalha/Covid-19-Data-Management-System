@@ -5,8 +5,9 @@ def insert_row(cols: list, conn, cursor):
     dataset_df = pd.read_csv("setup/dataset.csv")
     dataset_df = dataset_df.loc[:,cols].drop_duplicates()
     # Sütun sayısı kadar %s ekle
-    query = """INSERT INTO CASES(location_id,total_cases,new_cases,total_cases_per_million,new_cases_per_million, new_cases_smoothed_per_million, date_time) VALUES(%(iso_code)s,%(total_cases)s,
-                                        %(new_cases)s,%(total_cases_per_million)s,%(new_cases_per_million)s, %(new_cases_smoothed_per_million)s, %(date)s)""" 
+    query = """INSERT INTO COVID_TESTS(location_id, total_tests, new_tests,total_tests_per_thousand,new_tests_per_thousand,new_tests_smoothed,positive_rate,date_time) 
+                VALUES(%(iso_code)s,%(total_tests)s,
+                                        %(new_tests)s,%(total_tests_per_thousand)s,%(new_tests_per_thousand)s, %(new_tests_smoothed)s, %(positive_rate)s, %(date)s)""" 
     for idx, row in dataset_df.iterrows():
         insert_dict = dict()
         for col in cols:
@@ -24,18 +25,19 @@ conn = psycopg2.connect(database="postgres",
                         port="5432")
 cursor = conn.cursor()
 
-queryTable = """CREATE TABLE CASES (
+queryTable = """CREATE TABLE COVID_TESTS (
     id SERIAL PRIMARY KEY,
     location_id VARCHAR(80) REFERENCES locations(location_id),
-    total_cases NUMERIC,
-    new_cases NUMERIC,
-    total_cases_per_million NUMERIC,
-    new_cases_per_million NUMERIC,
-    new_cases_smoothed_per_million NUMERIC,
+    total_tests BIGINT,
+    new_tests NUMERIC,
+    total_tests_per_thousand NUMERIC,
+    new_tests_per_thousand NUMERIC,
+    new_tests_smoothed NUMERIC,
+    positive_rate NUMERIC,
     date_time DATE    
 );"""
 
 cursor.execute(queryTable)
 conn.commit()
-insert_row(["iso_code","total_cases","new_cases","total_cases_per_million","new_cases_per_million", "new_cases_smoothed_per_million", "date"], conn, cursor)
+insert_row(["iso_code","total_tests","new_tests","total_tests_per_thousand","new_tests_per_thousand", "new_tests_smoothed", "positive_rate", "date"], conn, cursor)
 conn.close()
