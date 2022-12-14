@@ -10,7 +10,10 @@ VALUES(%(iso_code)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully
     for idx, row in dataset_df.iterrows():
         insert_dict = dict()
         for col in cols:
-            insert_dict[col] = row[col]
+            if pd.isna(row[col]):
+                insert_dict[col] = None
+            else:
+                insert_dict[col] = row[col]
         cursor.execute(query, insert_dict)
         conn.commit()
 
@@ -25,11 +28,11 @@ cursor = conn.cursor()
 
 queryTable = """CREATE TABLE VACCINATIONS(
     id SERIAL PRIMARY KEY,
-    location_id INTEGER REFERENCES locations(location_id),
-    total_vaccinations INTEGER,
-    people_vaccinated INTEGER,
-    people_fully_vaccinated INTEGER,
-    total_boosters INTEGER,
+    location_id VARCHAR(80) REFERENCES locations(location_id),
+    total_vaccinations NUMERIC,
+    people_vaccinated NUMERIC,
+    people_fully_vaccinated NUMERIC,
+    total_boosters NUMERIC,
     new_vaccinations NUMERIC,
     new_vaccinations_smoothed NUMERIC,
     date_time DATE
