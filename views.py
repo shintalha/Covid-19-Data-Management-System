@@ -7,12 +7,12 @@ import numpy as np
 
 import os
 
-import viewVaccinations
-import viewCases
-import viewDeaths
-import viewHospitalAndIcu
-import viewCovidTests
-from model.locations import Locations
+from model.locations import *
+from viewHospitalAndIcu import *
+from viewCovidTests import *
+from viewDeaths import *
+from viewVaccinations import *
+from viewCases import *
 
 def locations_page():
     chart_paths = os.path.join('static', 'charts')

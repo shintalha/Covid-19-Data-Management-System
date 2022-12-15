@@ -1,0 +1,68 @@
+{% extends "after_login.html" %}
+{% block title %}Patients Add{% endblock %}
+{% block content %}
+
+<div class="container">
+    <h3 class="mx-auto">Add New Patients Data</h3>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+
+    {% for message in messages %}
+    <p class="text-danger text-start fs-3 fw-bold">{{message}}</p>
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
+    <form action="/patients/add" method="POST">
+        <div class="mb-3">
+            <label for="icu_patients" class="form-label">icu patients</label>
+            <input type="text" name="icu_patients" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="icu_patients_per_million" class="form-label">icu patients per million</label>
+            <input type="text" name="icu_patients_per_million" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="hosp_patients" class="form-label">hospital patients</label>
+            <input type="text" name="hosp_patients" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="hosp_patients_per_million" class="form-label">hospital patients per million</label>
+            <input type="text" name="hosp_patients_per_million" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="weekly_icu_admissions" class="form-label">weekly icu admissions</label>
+            <input type="text" name="weekly_icu_admissions" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="weekly_icu_admissions_per_million" class="form-label">weekly icu admissions per million</label>
+            <input type="text" name="weekly_icu_admissions_per_million" class="form-control">
+        </div>
+        <div class=" mb-3">
+            <label for="weekly_hosp_admissions" class="form-label">weekly hospital admissions</label>
+            <input type="text" name="weekly_hosp_admissions" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="weekly_hosp_admissions_per_million" class="form-label">weekly hospital admissions per million</label>
+            <input type="text" name="weekly_hosp_admissions_per_million" class="form-control">
+        </div>
+        <p>Country</p>
+        <select class=" form-select mb-4" name="country" aria-label=".form-select-sm example">
+            {% if countries %}
+
+            {% for c in countries %}
+            <option>{{c[0]}}</option>
+            {% endfor %}
+
+            {% endif %}
+        </select>
+        <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <p>Please enter date in 'YYYY-MM-DD' format</p>
+            <input type="text" name="date" class="form-control" id="total_cases">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</div>
+{% endblock %}
