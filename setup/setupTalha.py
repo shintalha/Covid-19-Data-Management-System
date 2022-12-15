@@ -4,7 +4,6 @@ import psycopg2
 def insert_row(cols: list, conn, cursor):
     dataset_df = pd.read_csv("setup/dataset.csv")
     dataset_df = dataset_df.loc[:,cols].drop_duplicates()
-    dataset_df = dataset_df[dataset_df.iso_code.apply(lambda row : row.split("_")[0]!="OWID")]
     # Sütun sayısı kadar %s ekle
     query = """INSERT INTO CASES(location_id,total_cases,new_cases,total_cases_per_million,new_cases_per_million, new_cases_smoothed_per_million, date_time) VALUES(%(iso_code)s,%(total_cases)s,
                                         %(new_cases)s,%(total_cases_per_million)s,%(new_cases_per_million)s, %(new_cases_smoothed_per_million)s, %(date)s)""" 

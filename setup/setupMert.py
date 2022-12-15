@@ -4,7 +4,6 @@ import psycopg2
 def insert_row(cols: list, conn, cursor):
     dataset_df = pd.read_csv("setup/dataset.csv")
     dataset_df = dataset_df.loc[:,cols].drop_duplicates()
-    dataset_df = dataset_df[dataset_df.iso_code.apply(lambda row : row.split("_")[0]!="OWID")]
     # Sütun sayısı kadar %s ekle
     query = """INSERT INTO COVID_TESTS(location_id, total_tests, new_tests,total_tests_per_thousand,new_tests_per_thousand,new_tests_smoothed,positive_rate,date_time) 
                 VALUES(%(iso_code)s,%(total_tests)s,
