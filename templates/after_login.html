@@ -24,7 +24,7 @@
         <div class="row w-100 d-flex justify-between">
           <div class="col-8">
             <div class="row d-flex">
-              <a class="navbar-brand col-2 me-0" href="#"> COVID19</a>
+              <a class="navbar-brand col-2 me-0" href="{{ url_for('home_page')}}"> COVID19</a>
               <a class="navbar-brand col-2 me-0" href="{{ url_for('locations_page')}}">Country Data</a>
               <a class="navbar-brand col-2 me-0" href="{{ url_for('patients_page')}}">Patients Data</a>
             </div>
@@ -42,9 +42,11 @@
     <!-- Jinja template engine renders it -->
   </div>
 
-  <footer class="border-top text-center text-lg-start w-100 mt-5">
+  <footer class="bg-light text-center text-lg-start">
     <!-- Copyright -->
-    <div class="text-center p-3">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2022 Copyright:
+      <p class="text-dark" >db2218</p>
     </div>
     <!-- Copyright -->
   </footer>
