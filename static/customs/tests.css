@@ -1,0 +1,9 @@
+.selfButton {
+    width: 20%;
+    background-color: #06c;
+    border-color: #06c;
+}
+
+.selfButton:hover {
+    background-color: #004c99;
+}
