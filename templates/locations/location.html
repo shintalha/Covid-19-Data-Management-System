@@ -1,0 +1,37 @@
+{% extends "after_login.html" %}
+{% block title %}Country{% endblock %}
+{% block content %}
+<div class="container">
+    {% if location_info['location'] == -1 %}
+    <h1>Data could not be found.</h1>
+    {% else %}
+    <div class="card text-center">
+        <div class="mx-0 card-header fw-bold row d-flex justify-content-center">
+            <h3 class="col-12">{{ location_info['location'] }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="country-info-container mt-3 mb-5">
+                <h5 class="fs-6 card-title"><span class="fw-bold me-2">Population:</span> {{ location_info['population']
+                    }}
+                </h5>
+                <h5 class="fs-6 card-title"><span class="fw-bold me-2">age_65_older: </span>{{
+                    location_info['age_65_older'] }}
+                </h5>
+                <h5 class="fs-6 card-title"><span class="fw-bold me-2">age_70_older: </span>{{
+                    location_info['age_70_older'] }}</h5>
+                <h5 class="fs-6 card-title"><span class="fw-bold me-2">median_age:</span> {{
+                    location_info['median_age'] }}</h5>
+                <h5 class="fs-6 card-title"><span class="fw-bold me-2">continent:</span> {{
+                    location_info['continent'] }}</h5>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div>
+        <a href="{{ url_for('locations_page') }}" class="btn btn-warning active col-2 me-2" role="button"
+                aria-pressed="true">Go
+                back</a>
+    </div>
+</div>
+
+{% endblock %}
