@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask import Flask, render_template
 
-from views import *
+from views.views import *
 
 
 app = Flask(__name__)
