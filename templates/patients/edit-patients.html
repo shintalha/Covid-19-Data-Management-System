@@ -1,0 +1,131 @@
+{% extends "after_login.html" %}
+{% block title %}Patients Edit{% endblock %}
+{% block content %}
+<div class="container-fluid">
+
+    <h3 class="fw-bold text-info">Patients Edit</h3>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+
+    {% for message in messages %}
+    <p class="text-danger text-center">{{message}}</p>
+    {% endfor %}
+
+    {% endif %}
+    {% endwith %}
+    <div class="row w-50 mt-3 add-del-btn-cont">
+        <div class="col-4">
+            <a id="update_patients" href="/patients/update" class="btn btn-info w-100" role="button" aria-pressed="true">Update</a>
+        </div>
+        <div class="col-4">
+            <a id="add_patients" href="/patients/add" class="btn btn-warning w-100" role="button" aria-pressed="true">Add</a>
+        </div>
+        <div class="col-4"> 
+            <form action="/patients/edit" method="POST">
+                <button type="submit" class="btn btn-danger w-100">Delete</button>
+                <p>Country</p>
+                <select id="del_country" class="form-select mb-4" name="del_country" aria-label=".form-select-sm">
+                    {% if countries %}
+
+                    {% for c in countries %}
+                    <option>{{c[0]}}</option>
+                    {% endfor %}
+
+                    {% endif %}
+                </select>
+                <div id = "del_date_id" class="mb-3">
+                    <label for="date" class="form-label">Date(YYYY-MM-DD)</label>
+                    <input type="text" name="del_date" class="form-control" id="del_date">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="row justify-content-start align-items-center">
+                <div class="col-6">
+                    <select id="sel_country" class="form-select" name="country" aria-label=".form-select-sm example">
+                        {% if countries %}
+
+                        {% for c in countries %}
+                        <option>{{c[0]}}</option>
+                        {% endfor %}
+
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-4">
+                    <button type="button" id="filter1" class="btn btn-primary w-100 my-3"><a
+                            class="link-light text-decoration-none" id="Filter" href="#">Filter</a></button>
+                    <script>
+                        document.querySelector("#filter1").addEventListener("click", function () {
+                            Filter = document.getElementById("Filter")
+                            country = document.getElementById("sel_country").value
+                            Filter.href = "/patients/edit?"
+                            Filter.href += "countryName=" + country
+                            window.location.replace(Filter.href)
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row my-3 mx-0">
+        <div class="col-12">
+            <table class="table" id="patients">
+                <thead>
+                    <tr>
+                        <th scope="col">Country</th>
+                        <th scope="col">Date</th>
+                        {% for header in headings %}
+                        <th scope="col">{{header}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in patients %}
+                    <tr>
+                        {% for cell in row %}
+                        <td>
+                            <div class="data">
+                                {{cell}}
+                            </div>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-6">
+        <nav aria-label="Page navigation" class="row h-100 d-flex align-items-center">
+            <ul class="pagination justify-content-end mb-0">
+                <li id="4" class="page-item"><a class="page-link">first</a></li>
+                <li id="1" class="page-item"><a class="page-link">{{paginationValues[0]}}</a></li>
+                <li id="2" class="page-item"><a class="page-link">{{paginationValues[1]}}</a></li>
+                <li id="3" class="page-item"><a class="page-link">{{paginationValues[2]}}</a></li>
+                <script>
+                    l1 = document.getElementById("1")
+                    l2 = document.getElementById("2")
+                    l3 = document.getElementById("3")
+                    l4 = document.getElementById("4")
+
+                    let params = (new URL(document.location)).searchParams;
+                    let name = params.get("countryName");
+                    let url = "/patients/edit?"
+
+                    if (name != null) {
+                        url = url + "countryName=" + name + "&"
+                    }
+                    l1.firstChild.href = url + "pageNumber=" + l1.firstChild.innerText
+                    l2.firstChild.href = url + "pageNumber=" + l2.firstChild.innerText
+                    l3.firstChild.href = url + "pageNumber=" + l3.firstChild.innerText
+                    l4.firstChild.href = url + "pageNumber=1"
+                </script>
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

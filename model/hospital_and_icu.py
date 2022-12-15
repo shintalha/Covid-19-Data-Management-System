@@ -32,30 +32,77 @@ class hospital_and_icu:
             self.connect()
 
     #Selecting by primary key value
-    def selectFromID(self, id):
-        query = """SELECT * FROM HOSPITAL_AND_ICU AS H WHERE H.id = %s""" 
-        self.con_control()
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute(query, (id,))
-            return cursor.fetchone()
-        except psycopg2.DatabaseError:  
-            self.connection.rollback()
-        finally:
-            cursor.close()
-    
-    #Selecting all rows primary key value
-    def selectAll(self):
-        query = """SELECT * FROM HOSPITAL_AND_ICU""" 
+    def selectFromLOCandDate(self, loc_id, date):
+        query = f"""select id FROM HOSPITAL_AND_ICU
+        WHERE (location_id = '{loc_id}' and date_time = '{date}')""" 
         self.con_control()
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            return cursor.fetchall()
+            result = cursor.fetchone()
         except psycopg2.DatabaseError:  
             self.connection.rollback()
+            result = None
         finally:
             cursor.close()
+            return result
+    
+    def selectFromLOC(self, location_id, offset):
+        query = f"""SELECT location_id, date_time, icu_patients ,
+        icu_patients_per_million,hosp_patients ,hosp_patients_per_million ,
+        weekly_icu_admissions ,weekly_icu_admissions_per_million ,weekly_hosp_admissions ,
+        weekly_hosp_admissions_per_million FROM HOSPITAL_AND_ICU
+        WHERE (((icu_patients IS NOT NULL) OR (hosp_patients IS NOT NULL)) and (location_id = '{location_id}'))
+        ORDER BY date_time desc OFFSET {offset} ROWS FETCH NEXT 50 ROWS ONLY;""" 
+        self.con_control()
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchall()
+        except psycopg2.DatabaseError:  
+            self.connection.rollback()
+            result = None
+        finally:
+            cursor.close()
+            return result
+    
+    #Selecting all rows primary key value
+    def selectAll(self):
+        query = """SELECT location_id, date_time, icu_patients ,
+        icu_patients_per_million,hosp_patients ,hosp_patients_per_million ,
+        weekly_icu_admissions ,weekly_icu_admissions_per_million ,weekly_hosp_admissions ,
+        weekly_hosp_admissions_per_million FROM HOSPITAL_AND_ICU
+        WHERE ((icu_patients IS NOT NULL) OR (hosp_patients IS NOT NULL))""" 
+        self.con_control()
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchall()
+        except psycopg2.DatabaseError:  
+            self.connection.rollback()
+            result = None
+        finally:
+            cursor.close()
+            return result
+    
+    def selectAll(self, offset):
+        query = f"""SELECT location_id, date_time, icu_patients ,
+        icu_patients_per_million,hosp_patients ,hosp_patients_per_million ,
+        weekly_icu_admissions ,weekly_icu_admissions_per_million ,weekly_hosp_admissions ,
+        weekly_hosp_admissions_per_million FROM HOSPITAL_AND_ICU
+        WHERE ((icu_patients IS NOT NULL) OR (hosp_patients IS NOT NULL))
+        ORDER BY date_time desc OFFSET {offset} ROWS FETCH NEXT 50 ROWS ONLY""" 
+        self.con_control()
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchall()
+        except psycopg2.DatabaseError:  
+            self.connection.rollback()
+            result = None
+        finally:
+            cursor.close()
+            return result
 
     #Deleting a row by id
     def delete(self, id):
@@ -73,28 +120,17 @@ class hospital_and_icu:
     #Inserting a new row to the table
     def insert(self, iso_code, icu_patients, icu_patients_per_million, hosp_patients, hosp_patients_per_million, weekly_icu_admissions, weekly_icu_admissions_per_million, weekly_hosp_admissions, weekly_hosp_admissions_per_million, date):
         
-        query = """INSERT INTO Hospital_AND_ICU(location_id,icu_patients ,
-        icu_patients_per_million,hosp_patients ,hosp_patients_per_million ,
+        query = f"""INSERT INTO HOSPITAL_AND_ICU(location_id, icu_patients ,
+        icu_patients_per_million ,hosp_patients ,hosp_patients_per_million ,
         weekly_icu_admissions ,weekly_icu_admissions_per_million ,weekly_hosp_admissions ,
         weekly_hosp_admissions_per_million , date_time) 
-        VALUES(%(iso_code)s,%(icu_patients)s,%(icu_patients_per_million)s,%(hosp_patients)s,
-        %(hosp_patients_per_million)s, %(weekly_icu_admissions)s, %(weekly_icu_admissions_per_million)s, 
-        %(weekly_hosp_admissions)s, %(weekly_hosp_admissions_per_million)s, %(date)s);""" 
+        VALUES('{iso_code}',{icu_patients},{icu_patients_per_million},{hosp_patients},
+        {hosp_patients_per_million}, {weekly_icu_admissions}, {weekly_icu_admissions_per_million}, 
+        {weekly_hosp_admissions}, {weekly_hosp_admissions_per_million}, '{date}');""" 
         self.con_control()
         try:
             cursor = self.connection.cursor()
-            cursor.execute(query, {
-                'iso_code': iso_code,
-                'icu_patients': icu_patients,
-                'icu_patients_per_million': icu_patients_per_million,
-                'hosp_patients': hosp_patients,
-                'hosp_patients_per_million': hosp_patients_per_million,
-                'weekly_icu_admissions': weekly_icu_admissions,
-                'weekly_icu_admissions_per_million': weekly_icu_admissions_per_million,
-                'weekly_hosp_admissions': weekly_hosp_admissions,
-                'weekly_hosp_admissions_per_million': weekly_hosp_admissions_per_million,
-                'date': date
-            })
+            cursor.execute(query)
             self.connection.commit()
         except psycopg2.DatabaseError:  
             self.connection.rollback()
@@ -102,32 +138,37 @@ class hospital_and_icu:
             cursor.close()
         
     #Updating a row by id
-    def update(self, id, iso_code, icu_patients, icu_patients_per_million, hosp_patients, hosp_patients_per_million, weekly_icu_admissions, weekly_icu_admissions_per_million, weekly_hosp_admissions, weekly_hosp_admissions_per_million, date):
-        query = """UPDATE HOSPITAL_AND_ICU SET (location_id,icu_patients ,
+    def update(self, iso_code, icu_patients, icu_patients_per_million, hosp_patients, hosp_patients_per_million, weekly_icu_admissions, weekly_icu_admissions_per_million, weekly_hosp_admissions, weekly_hosp_admissions_per_million, date):
+        query = f"""UPDATE HOSPITAL_AND_ICU SET (location_id,icu_patients ,
         icu_patients_per_million,hosp_patients ,hosp_patients_per_million ,
         weekly_icu_admissions ,weekly_icu_admissions_per_million ,weekly_hosp_admissions ,
         weekly_hosp_admissions_per_million , date_time) 
-        = (%(iso_code)s,%(icu_patients)s,%(icu_patients_per_million)s,%(hosp_patients)s,
-        %(hosp_patients_per_million)s, %(weekly_icu_admissions)s, %(weekly_icu_admissions_per_million)s, 
-        %(weekly_hosp_admissions)s, %(weekly_hosp_admissions_per_million)s, %(date)s) WHERE HOSPITAL_AND_ICU.id = %(id)s""" 
+        = ('{iso_code}',{icu_patients},{icu_patients_per_million},{hosp_patients},
+        {hosp_patients_per_million}, {weekly_icu_admissions}, {weekly_icu_admissions_per_million}, 
+        {weekly_hosp_admissions}, {weekly_hosp_admissions_per_million}, '{date}') WHERE HOSPITAL_AND_ICU.date_time = '{date}' and HOSPITAL_AND_ICU.location_id = '{iso_code}'""" 
         self.con_control()
         try:
             cursor = self.connection.cursor()
-            cursor.execute(query, {
-                'id': id,
-                'iso_code': iso_code,
-                'icu_patients': icu_patients,
-                'icu_patients_per_million': icu_patients_per_million,
-                'hosp_patients': hosp_patients,
-                'hosp_patients_per_million': hosp_patients_per_million,
-                'weekly_icu_admissions': weekly_icu_admissions,
-                'weekly_icu_admissions_per_million': weekly_icu_admissions_per_million,
-                'weekly_hosp_admissions': weekly_hosp_admissions,
-                'weekly_hosp_admissions_per_million': weekly_hosp_admissions_per_million,
-                'date': date
-            })
+            cursor.execute(query)
             self.connection.commit()
         except psycopg2.DatabaseError:  
             self.connection.rollback()
         finally:
             cursor.close()
+            
+    def is_there(self, date, location):
+        query = f"""select count(id) from hospital_and_icu
+                where (date_time = '{date}' and location_id = '{location}')
+                group by date, location_id"""
+
+        self.con_control()
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchall()
+        except psycopg2.DatabaseError:
+            self.connection.rollback()
+            result = None
+        finally:
+            cursor.close()
+            return True if result is not None and result[0]>0 else False
