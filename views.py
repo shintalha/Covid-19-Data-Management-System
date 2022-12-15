@@ -5,14 +5,14 @@ from werkzeug.utils import redirect
 
 import numpy as np
 
-from model.locations import *
 import os
 
-from views.viewCases import *
-from views.viewCovidTests import *
-from views.viewDeaths import *
-from views.viewHospitalAndIcu import *
-from views.viewVaccinations import *
+import viewVaccinations
+import viewCases
+import viewDeaths
+import viewHospitalAndIcu
+import viewCovidTests
+from model.locations import Locations
 
 def locations_page():
     chart_paths = os.path.join('static', 'charts')
