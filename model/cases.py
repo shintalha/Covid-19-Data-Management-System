@@ -104,3 +104,16 @@ class cases:
         finally:
             cursor.close()
             connection.close()
+
+    def findByLocationId(location_id):
+        query = """SELECT * FROM CASES C WHERE C.location_id = %s""" 
+        connection = cases.connect()
+        try:
+            cursor = connection.cursor()
+            cursor.execute(query, (location_id,))
+            return cursor.fetchone()
+        except psycopg2.DatabaseError:  
+            connection.rollback()
+        finally:
+            cursor.close()
+            connection.close()
