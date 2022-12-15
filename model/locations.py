@@ -1,69 +1,73 @@
 import psycopg2 
 
 #locations table operation functions
-class locations:
+class Locations:
+    def __init__(self):
+        self.columns = ["iso_code","continent","location","population","aged_65_older","aged_70_older","median_age"]
+        self.conn = None
+        self.cursor = None
+
     #connection to the database
-    def connect():
-        conn = psycopg2.connect(database="postgres",
+    def connect(self):
+        self.conn = psycopg2.connect(database="postgres",
                         host="localhost",
                         user="postgres",
                         password="1234",
                         port="5432")
-        return conn
 
     #Finding by primary key value
-    def findById(location_id):
+    def find_by_id(self, location_id):
         query = """SELECT * FROM LOCATIONS L WHERE L.location_id = %s""" 
-        connection = locations.connect()
+        self.connect()
         try:
-            cursor = connection.cursor()
-            cursor.execute(query, (location_id,))
-            return cursor.fetchone()
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, (location_id,))
+            return self.cursor.fetchone()
         except psycopg2.DatabaseError:  
-            connection.rollback()
+            self.conn.rollback()
         finally:
-            cursor.close()
-            connection.close()
+            self.cursor.close()
+            self.conn.close()
     
     #Finding all rows primary key value
-    def findAll():
+    def find_all(self):
         query = """SELECT * FROM LOCATIONS""" 
-        connection = locations.connect()
+        self.connect()
         try:
-            cursor = connection.cursor()
-            cursor.execute(query)
-            return cursor.fetchall()
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query)
+            return self.cursor.fetchall()
         except psycopg2.DatabaseError:  
-            connection.rollback()
+            self.conn.rollback()
         finally:
-            cursor.close()
-            connection.close()
+            self.cursor.close()
+            self.conn.close()
 
     #Deleting a row by id
-    def delete(location_id):
+    def delete(self, location_id):
         query = """DELETE FROM LOCATIONS L WHERE L.location_id = %s""" 
-        connection = locations.connect()
+        self.connect()
         try:
-            cursor = connection.cursor()
-            cursor.execute(query, (location_id,))
-            connection.commit()
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, (location_id,))
+            self.conn.commit()
         except psycopg2.DatabaseError:  
-            connection.rollback()
+            self.conn.rollback()
         finally:
-            cursor.close()
-            connection.close()
+            self.cursor.close()
+            self.conn.close()
 
     #Inserting a new row to the table
-    def save(location_id, country, population, aged_65_older, aged_70_older, median_age, handwashing_facilities):
+    def save(self, location_id, country, population, aged_65_older, aged_70_older, median_age, handwashing_facilities):
         
         query = """INSERT INTO LOCATIONS(location_id, country, population, aged_65_older,
             aged_70_older, median_age, handwashing_facilities) 
         VALUES(%(location_id)s,%(country)s,%(population)s,%(aged_65_older)s,
             %(aged_70_older)s,%(median_age)s,%(handwashing_facilities)s)""" 
-        connection = locations.connect()
+        self.connect()
         try:
-            cursor = connection.cursor()
-            cursor.execute(query, {
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, {
                 'location_id': location_id,
                 'country': country,
                 'population': population,
@@ -72,23 +76,23 @@ class locations:
                 'median_age': median_age,
                 'handwashing_facilities': handwashing_facilities
             })
-            connection.commit()
+            self.conn.commit()
         except psycopg2.DatabaseError:  
-            connection.rollback()
+            self.conn.rollback()
         finally:
-            cursor.close()
-            connection.close()
+            self.cursor.close()
+            self.conn.close()
         
     #Updating a row by id
-    def update(location_id, country, population, aged_65_older, aged_70_older, median_age, handwashing_facilities):
+    def update(self, location_id, country, population, aged_65_older, aged_70_older, median_age, handwashing_facilities):
         query = """UPDATE LOCATIONS SET (location_id, country, population, aged_65_older,
             aged_70_older, median_age, handwashing_facilities) = 
             (%(location_id)s,%(country)s,%(population)s,%(aged_65_older)s,
             %(aged_70_older)s,%(median_age)s,%(handwashing_facilities)s) WHERE LOCATIONS.location_id = %(location_id)s""" 
-        connection = locations.connect()
+        self.connect()
         try:
-            cursor = connection.cursor()
-            cursor.execute(query, {
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, {
                 'location_id': location_id,
                 'country': country,
                 'population': population,
@@ -97,36 +101,36 @@ class locations:
                 'median_age': median_age,
                 'handwashing_facilities': handwashing_facilities
             })
-            connection.commit()
+            self.conn.commit()
         except psycopg2.DatabaseError:  
-            connection.rollback()
+            self.conn.rollback()
         finally:
-            cursor.close()
-            connection.close()
+            self.cursor.close()
+            self.conn.close()
 
         #Finding by primary key value
-    def getCountryNames():
+    def get_country_names(self):
         query = """SELECT L.country FROM LOCATIONS L""" 
-        connection = locations.connect()
+        self.connect()
         try:
-            cursor = connection.cursor()
-            cursor.execute(query)
-            return cursor.fetchall()
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query)
+            return self.cursor.fetchall()
         except psycopg2.DatabaseError:  
-            connection.rollback()
+            self.conn.rollback()
         finally:
-            cursor.close()
-            connection.close()
+            self.cursor.close()
+            self.conn.close()
     
-    def getIdByCountryName(country):
+    def get_id_by_country_name(self, country):
         query = """SELECT L.location_id FROM LOCATIONS L WHERE L.country = %s""" 
-        connection = locations.connect()
+        self.connect()
         try:
-            cursor = connection.cursor()
-            cursor.execute(query, (country,))
-            return cursor.fetchone()
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, (country,))
+            return self.cursor.fetchone()
         except psycopg2.DatabaseError:  
-            connection.rollback()
+            self.conn.rollback()
         finally:
-            cursor.close()
-            connection.close()
+            self.cursor.close()
+            self.conn.close()

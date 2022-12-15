@@ -1,37 +1,27 @@
-from flask import render_template, request
+from datetime import datetime
+
+from flask import Flask, render_template, flash, url_for
+from werkzeug.utils import redirect
+
 import numpy as np
-from .model.locations import locations
-from .model.cases import cases
 
+from model.locations import *
+import os
 
-# cases
-def cases_page():
-    #pagination
-    countryName = request.args.get("countryName")
-    pageNumber =request.args.get("pageNumber") if request.args.get("pageNumber") is not None else "1"
-    pageNumber = int(pageNumber)
-    offset = (pageNumber-1)*50
-    paginationValues = (pageNumber,pageNumber+1,pageNumber+2) if (pageNumber)>0 else (0,1,2)
+def locations_page():
+    chart_paths = os.path.join('static', 'charts')
+    locations_table = Locations()
+    loc_count = np.array(locations_table.get_country_names()).shape[0]
+    loc_list = np.array(locations_table.get_country_names()).reshape(-1,loc_count)[0]
+    return render_template("locations/locations.html", locations = loc_list, charts=[chart_paths+i for i in ["\\aged_65_older.png",\
+                                                                        "\\aged_70_older.png", "\\location_pop.png", "\\median_age.png"]])
 
-    countries = None
-    casesData = None
-    headings = ("location_id","total_cases", "new_cases", "total_cases_per_million", "new_cases_per_million", "new_cases_smoothed_per_million", "date_time")
-    
-        
-    countries = locations.getCountryNames()
-    location_id = locations.getIdByCountryName(country=countryName)
-    
-
-    if countryName is not None:
-        result = cases.findByLocationId(location_id=location_id)
-    else: 
-        result = cases.findAll()
-    
-    casesData = np.zeros([1, 8], dtype='str')
-    for row in result:
-        newRow = np.array(row)
-        casesData = np.vstack([casesData, newRow])
-
-    casesData = np.delete(cases, 0, 0)
-    return render_template("cases/cases.html", paginationValues=paginationValues, headings=headings, cases=casesData, countries=countries)
+def location_page(loc_name):
+    locations_table = Locations()
+    loc_id = locations_table.get_id_by_country_name(loc_name)
+    if loc_id == None:
+        return render_template("locations/location.html", location_info = {"location":-1})
+    loc_info = locations_table.find_by_id(loc_id[0])
+    print(dict(zip(locations_table.columns,loc_info)))
+    return render_template("locations/location.html", location_info = dict(zip(locations_table.columns,loc_info)))
 
