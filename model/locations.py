@@ -134,3 +134,26 @@ class Locations:
         finally:
             self.cursor.close()
             self.conn.close()
+
+    #Connection control
+    def con_control(self):
+        try:
+            self.conn.status()
+        except:
+            self.connect()
+
+    def is_there(self, l_id):
+        query = f"""SELECT LOCATION_ID FROM LOCATIONS
+                WHERE (LOCATION_ID = '{l_id}')"""
+        
+        self.con_control()        
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute(query)
+            result = cursor.fetchone()
+        except psycopg2.DatabaseError:
+            self.conn.rollback()
+            result = None
+        finally:
+            cursor.close()
+            return result
