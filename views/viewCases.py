@@ -1,7 +1,7 @@
 from flask import render_template, request
 import numpy as np
-from model.locations import Locations
-from model.cases import cases
+from ..model.locations import Locations
+from ..model.cases import cases
 
 
 # cases
