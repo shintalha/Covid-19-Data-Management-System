@@ -3,7 +3,7 @@ import psycopg2
 #locations table operation functions
 class Locations:
     def __init__(self):
-        self.columns = ["iso_code","continent","location","population","aged_65_older","aged_70_older","median_age"]
+        self.columns = ["location_id","continent","location","population","aged_65_older","aged_70_older","median_age"]
         self.conn = None
         self.cursor = None
 
