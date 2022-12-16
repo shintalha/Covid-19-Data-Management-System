@@ -12,6 +12,7 @@ input[id="adminPassword"] {
     visibility:hidden;
 }
 
+
 input[type=checkbox]:checked + input[id="adminPassword"] {
     visibility:visible;
 }
