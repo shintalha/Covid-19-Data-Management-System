@@ -13,6 +13,7 @@ from viewCovidTests import *
 from viewDeaths import *
 from viewVaccinations import *
 from viewCases import *
+from viewsLogin import *
 
 def locations_page():
     chart_paths = os.path.join('static', 'charts')
