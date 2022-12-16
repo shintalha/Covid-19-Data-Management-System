@@ -2,46 +2,92 @@
 {% block title %}Country{% endblock %}
 {% block content %}
 
-<div class="container d-flex align-items-top mt-5 min-vh-100 justify-content-center">
-    <div class="row w-100">
-        <aside class="col-sm-4"></aside>
-        <aside class="col-sm-4 ">
-            <div class="card ">
-                <article class="card-body">
-                    <h4 class="card-title text-center mb-4 mt-1">Login</h4>
-                    <form action="/login" method="post">
-                        <div class="form-group my-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text h-100"> <i class="fa fa-user"></i> </span>
-                                </div>
-                                <input name="email" class="form-control" placeholder="Email" id="email" type="email">
-                            </div> <!-- input-group.// -->
-                        </div> <!-- form-group// -->
-                        <div class="form-group mb-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text h-100"> <i class="fa fa-lock"></i> </span>
-                                </div>
-                                <input name="password" id="password" class="form-control" placeholder="************"
-                                    type="password">
-                            </div> <!-- input-group.// -->
-                        </div> <!-- form-group// -->
-                        <div class="form-group d-flex justify-content-center mt-4">
-                            <button type="submit" class="btn btn-primary btn-block"> Login </button>
-                        </div> <!-- form-group// -->
-                    </form>
-                </article>
-            </div> <!-- card.// -->
-            <ul>
-                <li><a href="{{ url_for('locations_page') }}">HACK THE SYSTEM</a></li>
-            </ul>
+<div class="mx-auto m-3 p-3" style="width: 25%;">
+    <ul class="nav nav-pills" id="myTab">
+        <li class="nav-item"style="width: 25%;">
+            <a href="#login" class="nav-link active" data-bs-toggle="tab">Login</a>
+        </li>
+        <li class="nav-item"style="width: 25%;">
+            <a href="#register" class="nav-link" data-bs-toggle="tab">Register</a>
+        </li>
+    </ul>
+        <br/>
 
-        </aside> <!-- col.// -->
-        <aside class="col-sm-4"></aside>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="tab-login">
+          <form>
+      
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <input type="email" id="loginName" class="form-control" />
+              <label class="form-label" for="loginName">Email or username</label>
+            </div>
+      
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <input type="password" id="loginPassword" class="form-control" />
+              <label class="form-label" for="loginPassword">Password</label>
+            </div>
+      
+            <!-- 2 column grid layout -->
+            
+            <label class="form-label" for="loginPassword">Login as admin</label>
+            <input type="checkbox" />
+            <input type="password" id="adminPassword" placeholder="admin password"/> <br />
 
-    </div> <!-- row.// -->
 
-</div>
-<!--container end.//-->
+            
+      
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+      
+          </form>
+        </div>
+        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="tab-register">
+          <form>
+      
+            <!-- Name input -->
+            <div class="form-outline mb-4">
+              <input type="text" id="registerName" class="form-control" />
+              <label class="form-label" for="registerName">Name</label>
+            </div>
+      
+            <!-- Username input -->
+            <div class="form-outline mb-4">
+              <input type="text" id="regiterSurName" class="form-control" />
+              <label class="form-label" for="regiterSurName">Surname</label>
+            </div>
+      
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <input type="email" id="registerEmail" class="form-control" />
+              <label class="form-label" for="registerEmail">Email</label>
+            </div>
+      
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <input type="password" id="registerPassword" class="form-control" />
+              <label class="form-label" for="registerPassword">Password</label>
+            </div>
+      
+            <!-- Repeat Password input -->
+            <div class="form-outline mb-4">
+              <input type="password" id="registerRepeatPassword" class="form-control" />
+              <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+            </div>
+      
+            <!-- Checkbox -->
+            
+                <label class="form-label" for="loginPassword">Login as admin</label>
+                <input type="checkbox" />
+                <input type="password" id="adminPassword" placeholder="admin password"/> <br /> <br />
+      
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+          </form>
+        </div>
+      </div>
+      <!-- Pills content -->
+
+
 {% endblock %}

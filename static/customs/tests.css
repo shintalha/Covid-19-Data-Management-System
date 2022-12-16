@@ -7,3 +7,11 @@
 .selfButton:hover {
     background-color: #004c99;
 }
+
+input[id="adminPassword"] {
+    visibility:hidden;
+}
+
+input[type=checkbox]:checked + input[id="adminPassword"] {
+    visibility:visible;
+}
