@@ -13,7 +13,7 @@
 
     {% endif %}
     {% endwith %}
-    <div class="row w-50 mt-3 add-del-btn-cont">
+    <div class="row w-100 mt-3 add-del-btn-cont">
         <div class="col-4">
             <a id="update_patients" href="/patients/update" class="btn btn-info w-100" role="button" aria-pressed="true">Update</a>
         </div>
@@ -34,40 +34,41 @@
                     {% endif %}
                 </select>
                 <div id = "del_date_id" class="mb-3">
-                    <label for="date" class="form-label">Date(YYYY-MM-DD)</label>
-                    <input type="text" name="del_date" class="form-control" id="del_date">
+                    <input type="text" name="del_date" class="form-control" id="del_date" placeholder="Please enter date in 'YYYY-MM-DD' format">
                 </div>
             </form>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-6">
-            <div class="row justify-content-start align-items-center">
-                <div class="col-6">
-                    <select id="sel_country" class="form-select" name="country" aria-label=".form-select-sm example">
-                        {% if countries %}
+        <div class="row justify-content-start align-items-center">
+            <div class="col-4">
+                <select id="sel_country" class="form-select" name="country" aria-label=".form-select-sm example">
+                    {% if countries %}
 
-                        {% for c in countries %}
-                        <option>{{c[0]}}</option>
-                        {% endfor %}
+                    {% for c in countries %}
+                    <option>{{c[0]}}</option>
+                    {% endfor %}
 
-                        {% endif %}
-                    </select>
-                </div>
-                <div class="col-4">
-                    <button type="button" id="filter1" class="btn btn-primary w-100 my-3"><a
-                            class="link-light text-decoration-none" id="Filter" href="#">Filter</a></button>
-                    <script>
-                        document.querySelector("#filter1").addEventListener("click", function () {
-                            Filter = document.getElementById("Filter")
-                            country = document.getElementById("sel_country").value
-                            Filter.href = "/patients/edit?"
-                            Filter.href += "countryName=" + country
-                            window.location.replace(Filter.href)
-                        });
-                    </script>
-                </div>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="col-4">
+                <input type="text" name="date" class="form-control" id="date" placeholder="Please enter date in 'YYYY-MM-DD' format">
+            </div>
+            <div class="col-4">
+                <button type="button" id="filter1" class="btn btn-primary w-100 my-3"><a
+                        class="link-light text-decoration-none" id="Filter" href="#">Filter</a></button>
+                <script>
+                    document.querySelector("#filter1").addEventListener("click", function () {
+                        Filter = document.getElementById("Filter")
+                        country = document.getElementById("sel_country").value
+                        date = document.getElementById("date").value
+                        Filter.href = "/patients/edit?"
+                        Filter.href += "countryName=" + country + "&dateVariable=" + date
+                        window.location.replace(Filter.href)
+                    });
+                </script>
             </div>
         </div>
     </div>
