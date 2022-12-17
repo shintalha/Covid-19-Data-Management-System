@@ -81,4 +81,20 @@ class User:
             cursor.close()
             return result
         
+    def isAdmin(self, id):
+        query = f"""select admin from user_table
+                    group by id having(id={id});"""
+        
+        self.con_control
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchone()
+        except psycopg2.DatabaseError:  
+            self.connection.rollback()
+            result = None
+        finally:
+            cursor.close()
+            return result[0]
+        
         
