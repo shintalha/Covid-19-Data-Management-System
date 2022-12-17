@@ -99,8 +99,10 @@ class cases:
                 'date_time': date_time
             })
             connection.commit()
+            return True
         except psycopg2.DatabaseError:  
             connection.rollback()
+            return False
         finally:
             cursor.close()
             connection.close()
@@ -112,6 +114,32 @@ class cases:
             cursor = connection.cursor()
             cursor.execute(query, (location_id,))
             return cursor.fetchone()
+        except psycopg2.DatabaseError:  
+            connection.rollback()
+        finally:
+            cursor.close()
+            connection.close()
+
+    def Get100ByOffset(offset):
+        query = """SELECT * FROM CASES OFFSET %s ROWS FETCH FIRST 100 ROW ONLY""" 
+        connection = cases.connect()
+        try:
+            cursor = connection.cursor()
+            cursor.execute(query, (offset,))
+            return cursor.fetchall()
+        except psycopg2.DatabaseError:  
+            connection.rollback()
+        finally:
+            cursor.close()
+            connection.close()
+    
+    def Get100ByOffsetAndCountry(country, offset):
+        query = """SELECT * FROM CASES WHERE CASES.location_id = %s OFFSET %s ROWS FETCH FIRST 100 ROW ONLY""" 
+        connection = cases.connect()
+        try:
+            cursor = connection.cursor()
+            cursor.execute(query, (country,offset,))
+            return cursor.fetchall()
         except psycopg2.DatabaseError:  
             connection.rollback()
         finally:

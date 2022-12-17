@@ -33,3 +33,6 @@ def location_page(loc_name):
 
 def home_page():
     return render_template("home.html")
+
+def login_page():
+    return render_template("login.html")
