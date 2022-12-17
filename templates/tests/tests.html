@@ -1,0 +1,272 @@
+{% extends "after_login.html" %}
+{% block title %}Test{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    function goNewDirect(page, loc, date, endDate)
+    {
+        console.log(loc);
+        console.log(date);
+        console.log(endDate);
+        locStr = "";
+        dateStr = "";
+        endDateStr = "";
+        if(loc != null && loc != '')
+            locStr = "&loc_name="+loc; 
+        if(date != null && date != '')
+            dateStr = "&date="+date;
+        if(endDate != null && endDate != '')
+            endDateStr = "&end_date="+endDate;
+        
+        console.log(locStr);
+        console.log(dateStr);
+        console.log(endDateStr);
+        if(page == null || page == 'first')
+        {
+            window.location.href = "/tests?page=1"+locStr+dateStr+endDateStr;
+        }
+        else
+        {
+            window.location.href = "/tests?page="+page+locStr+dateStr+endDateStr;
+        }
+    }
+    function changePage(pageToggle)
+    {
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+        if(urlPage.get("page") == null || (urlPage.get("page") == '1' && pageToggle == 0))
+            page = (1).toString();
+        else
+        {
+            if(pageToggle == 0)
+                page = (parseInt(urlPage.get("page")) - 1).toString();
+            if(pageToggle == 1)
+                page = (parseInt(urlPage.get("page")) + 1).toString();
+            if(pageToggle == -1)
+                page = urlPage.get("page");
+        }
+        goNewDirect(page, urlPage.get("loc_name"), urlPage.get("date"),urlPage.get("end_date"));
+    }
+    function displayEndTime()
+    {
+        let checkbox = document.getElementById('flexCheckDefault');
+        if (checkbox.checked)
+        {
+            let start = document.getElementById('inputGroupSelect02');
+            if(start.value == 'Choose...')
+            {
+                alert("Please first choose a start date !!"); 
+                checkbox.checked = false;
+                return;  
+            }
+            let end = document.getElementById('endDateSelect');
+            let button = document.getElementById('inputGroupButton02');
+            end.style.display = "flex";
+            button.style.display = "none";
+        }
+        else
+        {
+            let end = document.getElementById('endDateSelect');
+            let button = document.getElementById('inputGroupButton02');
+            end.style.display = "none";
+            button.style.display = "flex";
+        }
+    }
+    function compare(startDate, endDate)
+    {
+        let startList = startDate.split("/");
+        let endList = endDate.split("/");
+        if(Number(startList[2]) > Number(endList[2]))
+            return false;
+        else if(Number(startList[1]) > Number(endList[1]))
+            return false;
+        else if(Number(startList[0]) > Number(endList[0]))
+            return false;
+        else 
+            return true;
+    }
+    function validateTimeInterval()
+    {
+        let endTime = document.getElementById("inputGroupSelect03");
+        if(checkIfSelected(endTime) == false) return;
+        let startTime = document.getElementById("inputGroupSelect02");
+        if(endTime.value == startTime.value)
+            alert("Start and end dates for interval are equal !!");
+        let comp = compare(startTime.value, endTime.value);
+        if(comp == false)
+            alert("Start date is after the end date !!");   
+    }
+    function checkIfSelected(element)
+    {
+        if(element.value == 'Choose...')
+        {
+            alert("Choose !!"); 
+            return false;
+        }
+        return true;
+    }
+    function filterCountry()
+    {
+        let location = document.getElementById("inputGroupSelect01");
+        if(checkIfSelected(location) == false) 
+            return;  
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+
+        goNewDirect(urlPage.get("page"), location.value, urlPage.get("date"), urlPage.get("end_date"));
+    }
+    function filterDates(button)
+    {
+        if(checkIfSelected(button) == false) 
+            return;  
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+        goNewDirect(urlPage.get("page"), urlPage.get("loc_name"), button.value, urlPage.get("end_date"));
+    }
+    function filterEndDates(button)
+    {
+        if(checkIfSelected(button) == false || validateTimeInterval() == false) 
+            return;  
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+        goNewDirect(urlPage.get("page"), urlPage.get("loc_name"), document.getElementById("inputGroupSelect02").value, button.value);
+    }
+    function reset(type)
+    {
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+        if(type == 'l')
+            goNewDirect(urlPage.get("page"), '', urlPage.get("date"), urlPage.get("end_date"));
+        if(type == 's')
+            goNewDirect(urlPage.get("page"), urlPage.get("loc_name"), '', '');
+        if(type == 'e')
+            goNewDirect(urlPage.get("page"), urlPage.get("loc_name"), urlPage.get("date"), '');
+    }
+    function deleteRow(row)
+    {
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+        if(row.value != "")
+            window.location.href = "/tests/"+row.value+"?"+urlPage;
+        else
+        window.location.href = "/tests?"+urlPage;
+    }
+    function updateRow(row)
+    {
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+        if(row.value == "")
+            window.location.href = "/tests/"+row.value+"?"+urlPage;
+        else
+            window.location.href = "/update-tests?id="+row.value;
+    }
+    
+</script>
+<div class="container">
+    <div class="row d-flex mt-2">
+        <div class="input-group col">
+            <select class="form-select" id="inputGroupSelect01" aria-label="Example select with button addon">
+              <option selected>Choose...</option>
+            {% for loc in locations%}
+               <option value={{loc}}>{{loc}}</option>
+            {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary" type="button" onclick="filterCountry()">Filter</button>
+            <button class="btn btn-outline-secondary" id="resetGroupButton02" onclick="reset('l')"
+             type="button">Reset</button>
+        </div>
+        <div class="col">
+            
+            <button class="btn btn-outline-secondary" type="button"
+                onclick="document.location.href = '/add-tests' ">Add</button>
+        </div>
+        <div class="col">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end mb-0">
+                    <li class="page-item"><button class="btn btn-outline-secondary" style="margin-right: 5px;"
+                            onclick="changePage(0)" type="button">PREV</button></li>
+                    <li class="page-item"><button class="btn btn-outline-secondary" onclick="changePage(1)"
+                            type="button">NEXT</button></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="row d-flex mt-2">
+        <div class="input-group col">
+            <select class="form-select" id="inputGroupSelect02" aria-label="Example select with button addon">
+              <option selected>Choose...</option>
+            {% for date in dates %}
+               <option value={{date}}>{{date}}</option>
+            {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary" id="inputGroupButton02" onclick="filterDates(document.getElementById('inputGroupSelect02'))"
+             type="button">Button</button>
+             <button class="btn btn-outline-secondary" id="resetGroupButton02" onclick="reset('s')"
+             type="button">Reset</button>
+        </div>
+
+        
+        <div style="display: none;" class = "input-group col" id="endDateSelect">
+            <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon">
+              <option selected>Choose...</option>
+            {% for date in dates %}
+               <option value={{date}}>{{date}}</option>
+            {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary" type="button" onclick="filterEndDates(document.getElementById('inputGroupSelect03'))">Button</button>
+            <button class="btn btn-outline-secondary" id="resetGroupButton02" onclick="reset('e')"
+             type="button">Reset</button>
+        </div>
+        <div class="form-check col">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="displayEndTime()">
+            <label class="form-check-label" for="flexCheckDefault">
+              Want to enter an interval
+            </label>
+        </div>
+    </div>
+    <div class="row my-3 mx-0">
+        <table class="table align-middle table-striped table-hover">
+            <thead>
+              <tr class="align-bottom">
+
+                {% for head in table_headers %}
+                <th scope="col">"{{head}}"</th>
+                {% endfor %}
+                <th scope="col"> </th>
+                <th scope="col"> </th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for row in table_rows%}
+                <tr class="align-items-center">                    
+                    {% for cell in row[1:] %}
+                    <td>
+                        <div class="data">
+                            {{cell}}
+                        </div>
+                    </td>
+                    {% endfor %}
+                    <td>
+                        <div class="data">
+                            <button class="btn btn-outline-secondary" style="background-color: red;" href="#"
+                                    id="delete{{ row[0] }}" value="{{ row[0] }}"
+                                    onclick="deleteRow(document.getElementById('delete{{ row[0] }}'))" type="button"><i
+                                    class="bi bi-trash" style="color: white;"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="data">
+                            <button class="btn btn-outline-secondary" type="button"
+                            href="#" id="update{{ row[0] }}" value="{{ row[0] }}"
+                            onclick="updateRow(document.getElementById('update{{ row[0] }}'))" "><i
+                            class="bi-arrow-right" style="color: blue;"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
