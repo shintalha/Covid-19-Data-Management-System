@@ -18,6 +18,17 @@ def insert_row(cols: list, conn, cursor):
         cursor.execute(query, insert_dict)
         conn.commit()
 
+conn = psycopg2.connect(database="postgres",
+                        host="localhost",
+                        user="postgres",
+                        password="1234",
+                        port="5432")
+
+query = """DROP TABLE IF EXISTS Locations;"""
+cursor = conn.cursor()
+cursor.execute(query)
+conn.commit()
+
 
 query = """CREATE TABLE Locations (
     location_id VARCHAR(80) PRIMARY KEY,
@@ -28,14 +39,8 @@ query = """CREATE TABLE Locations (
     rate_age_70_older NUMERIC,
     median_age NUMERIC );"""
 
-conn = psycopg2.connect(database="postgres",
-                        host="localhost",
-                        user="postgres",
-                        password="1234",
-                        port="5432")
 cursor = conn.cursor()
 cursor.execute(query)
 conn.commit()
-
 insert_row(["iso_code","continent","location","population","aged_65_older","aged_70_older","median_age"], conn, cursor)
 conn.close()
