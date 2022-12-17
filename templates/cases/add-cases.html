@@ -1,0 +1,56 @@
+{% extends "after_login.html" %}
+{% block title %}Cases{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    const message = '{{message}}';
+
+    if (message != "empty") {
+        if (message == "success") {
+            window.alert("Data successfully added.");
+            window.location.href = "/cases";
+        }
+        else {
+            window.alert("Data could not be added. Please control the values and try again!.");
+            window.location.href = "/add-cases";
+        }
+    }
+
+</script>
+<h2 class="container my-4">Add Cases Data</h2>
+<div class="container my-4">
+    <form action="/add-cases" method="POST">
+        <div class="mb-3">
+            <label for="location_id" class="form-label">Location Id</label>
+            <input type="text" name="location_id" class="form-control" id="location_id" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="total_cases" class="form-label">Total Cases</label>
+            <input type="text" name="total_cases" class="form-control" id="total_cases" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="new_cases" class="form-label">New Cases</label>
+            <input type="text" name="new_cases" class="form-control" id="new_cases" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="total_cases_per_million" class="form-label">Total Cases Per Million</label>
+            <input type="text" name="total_cases_per_million" class="form-control" id="total_cases_per_million"
+                aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="new_cases_per_million" class="form-label">New Cases Per Million</label>
+            <input type="text" name="new_cases_per_million" class="form-control" id="new_cases_per_million"
+                aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="new_cases_smoothed" class="form-label">New Cases Smoothed Per Million</label>
+            <input type="text" name="new_cases_smoothed_per_million" class="form-control"
+                id="new_cases_smoothed_per_million" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="new_cases_smoothed_per_million" class="form-label">Date (yyyy-mm-dd)</label>
+            <input type="text" name="date_time" class="form-control" id="date_time" aria-describedby="emailHelp">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Data</button>
+    </form>
+</div>
+{% endblock %}

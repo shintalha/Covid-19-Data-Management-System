@@ -58,7 +58,7 @@ class cases:
         
         query = """INSERT INTO CASES(location_id,total_cases,new_cases,total_cases_per_million,
         new_cases_per_million, new_cases_smoothed_per_million, date_time) 
-        VALUES(%(location_id)s,%(total_cases)s, %(new_cases)s,%(total_cases_per_million)s,
+        VALUES(%(location_id)s, %(total_cases)s, %(new_cases)s,%(total_cases_per_million)s,
         %(new_cases_per_million)s, %(new_cases_smoothed_per_million)s, %(date_time)s)""" 
         connection = cases.connect()
         try:
@@ -73,8 +73,10 @@ class cases:
                 'date_time': date_time
             })
             connection.commit()
+            return True
         except psycopg2.DatabaseError:  
             connection.rollback()
+            return False
         finally:
             cursor.close()
             connection.close()
@@ -99,8 +101,10 @@ class cases:
                 'date_time': date_time
             })
             connection.commit()
+            return True
         except psycopg2.DatabaseError:  
             connection.rollback()
+            return False
         finally:
             cursor.close()
             connection.close()
@@ -112,6 +116,32 @@ class cases:
             cursor = connection.cursor()
             cursor.execute(query, (location_id,))
             return cursor.fetchone()
+        except psycopg2.DatabaseError:  
+            connection.rollback()
+        finally:
+            cursor.close()
+            connection.close()
+
+    def Get100ByOffset(offset):
+        query = """SELECT * FROM CASES OFFSET %s ROWS FETCH FIRST 100 ROW ONLY""" 
+        connection = cases.connect()
+        try:
+            cursor = connection.cursor()
+            cursor.execute(query, (offset,))
+            return cursor.fetchall()
+        except psycopg2.DatabaseError:  
+            connection.rollback()
+        finally:
+            cursor.close()
+            connection.close()
+    
+    def Get100ByOffsetAndCountry(country, offset):
+        query = """SELECT * FROM CASES WHERE CASES.location_id = %s OFFSET %s ROWS FETCH FIRST 100 ROW ONLY""" 
+        connection = cases.connect()
+        try:
+            cursor = connection.cursor()
+            cursor.execute(query, (country,offset,))
+            return cursor.fetchall()
         except psycopg2.DatabaseError:  
             connection.rollback()
         finally:
