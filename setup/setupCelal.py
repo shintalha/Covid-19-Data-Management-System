@@ -4,7 +4,7 @@ import psycopg2
 def insert_row(cols: list, conn, cursor):
     dataset_df = pd.read_csv("setup/dataset.csv")
     dataset_df = dataset_df.loc[:,cols].drop_duplicates()
-    dataset_df = dataset_df[dataset_df.iso_code.apply(lambda row : row.split("_")[0]!="OWID")]
+    dataset_df = dataset_df[dataset_df.iso_code.apply(lambda row : row.split("_")[0]!="OWID")].dropna()
     # Sütun sayısı kadar %s ekle
     query = """INSERT INTO Hospital_AND_ICU(location_id,icu_patients ,icu_patients_per_million,hosp_patients ,hosp_patients_per_million ,weekly_icu_admissions ,weekly_icu_admissions_per_million ,weekly_hosp_admissions ,weekly_hosp_admissions_per_million , date_time) VALUES(%(iso_code)s,%(icu_patients)s,
                                         %(icu_patients_per_million)s,%(hosp_patients)s,%(hosp_patients_per_million)s, %(weekly_icu_admissions)s, %(weekly_icu_admissions_per_million)s, %(weekly_hosp_admissions)s, %(weekly_hosp_admissions_per_million)s, %(date)s);"""

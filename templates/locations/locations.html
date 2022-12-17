@@ -3,9 +3,12 @@
 {% block content %}
 
 <script>
-  function goToLocation(event) {
-    let location_name = document.getElementById("location").value;
-    window.location.href = "/locations/" + location_name;
+  function goToLocation(selection) {
+    let location_name = inputLocSelect.value;
+    if(location_name == 'Choose...')
+      alert("Select a country !!!");
+    else
+      window.location.href = "/locations/" + location_name;
   }
 </script>
 
@@ -15,19 +18,15 @@
     <div class="w-75 p-3">
       <div class="col-55">
         <div class="row justify-content-start align-items-center">
-          <div class="col-10">
-            <select id="location" class="form-select" name="country" aria-label=".form-select-sm example">
-              <datalist id="locations">
-                {% for loc in locations %}
-                <option>{{loc}}</option>
-                {% endfor %}
-              </datalist>
+          <div class="input-group">
+            <select class="form-select" id="inputLocSelect" aria-label="Example select with button addon">
+              <option selected value='Choose...'>Choose...</option>
+            {% for loc in locations %}
+                <option value={{loc}}>{{loc}}</option>
+            {% endfor %}
             </select>
-          </div>
-          <div class="col-2">
-            <button type="button" id="filter1" class="btn btn-primary w-100 my-3"><a
-                class="link-light text-decoration-none" id="Filter" href="#" onclick="goToLocation()">Go</a>
-            </button>
+            <button style="width: 70px;justify-content: center;" class="btn btn-outline-secondary" id="inputLocButton" onclick="goToLocation(document.getElementById('inputLocSelect'))"
+              type="button">Filter</button>
           </div>
         </div>
       </div>
