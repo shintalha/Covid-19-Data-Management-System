@@ -12,9 +12,10 @@
             window.location.href = "/cases?page=2" + locStr;
         }
         else {
-            if (pageToggle == 0 && parseInt(page) - 1 >= 1) {
+            if (pageToggle == -1)
+                window.location.href = "/cases?page=" + parseInt(page).toString() + locStr;
+            if (pageToggle == 0 && parseInt(page) - 1 >= 1) 
                 window.location.href = "/cases?page=" + (parseInt(page) - 1).toString() + locStr;
-            }
             if (pageToggle == 1)
                 window.location.href = "/cases?page=" + (parseInt(page) + 1).toString() + locStr;
         }
@@ -41,18 +42,11 @@
         const urlStr = window.location.search;
         let urlPage = new URLSearchParams(urlStr);
 
-        goNewDirect(urlPage.get("page"), location.value);
+        goNewDirect(-1, 1, location.value);
     }
 
     function reset(type) {
-        const urlStr = window.location.search;
-        let urlPage = new URLSearchParams(urlStr);
-        if (type == 'l')
-            goNewDirect(urlPage.get("page"), '', urlPage.get("date"), urlPage.get("end_date"));
-        if (type == 's')
-            goNewDirect(urlPage.get("page"), urlPage.get("loc_name"), '', '');
-        if (type == 'e')
-            goNewDirect(urlPage.get("page"), urlPage.get("loc_name"), urlPage.get("date"), '');
+        document.location.href = '/cases'
     }
 
     function deleteRow(row) {
