@@ -1,0 +1,61 @@
+{% extends "after_login.html" %}
+{% block title %}Vaccinations{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    const message = '{{message}}';
+
+    if (message != "empty") {
+        if (message == "success") {
+            window.alert("Data successfully added.");
+            window.location.href = "/vaccinations";
+        }
+        else {
+            window.alert("Data could not be added. Please control the values and try again!.");
+            window.location.href = "/add-vaccinations";
+        }
+    }
+
+</script>
+<h2 class="container my-4">Add Vaccinations Data</h2>
+<div class="container my-4">
+    <form action="/add-vaccinations" method="POST">
+        <div class="mb-3">
+            <label for="location_id" class="form-label">Location Id</label>
+            <input type="text" name="location_id" class="form-control" id="location_id" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="total_vaccinations" class="form-label">Total Vaccinations</label>
+            <input type="text" name="total_vaccinations" class="form-control" id="total_vaccinations" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="people_vaccinated" class="form-label">People Vaccinated</label>
+            <input type="text" name="people_vaccinated" class="form-control" id="people_vaccinated" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="people_fully_vaccinated" class="form-label">People Fully Vaccinated</label>
+            <input type="text" name="people_fully_vaccinated" class="form-control" id="people_fully_vaccinated"
+                aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="total_boosters" class="form-label">Total Boosters</label>
+            <input type="text" name="total_boosters" class="form-control" id="total_boosters"
+                aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="new_vaccinations_smoothed" class="form-label">New Vaccinations</label>
+            <input type="text" name="new_vaccinations" class="form-control"
+                id="new_vaccinations_smoothed_per_million" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="new_vaccinations_smoothed_per_million" class="form-label">New Vaccinations Smoothed</label>
+            <input type="text" name="new_vaccinations_smoothed_per_million" class="form-control"
+                id="new_vaccinations_smoothed_per_million" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="vaccinations_date" class="form-label">Date (yyyy-mm-dd)</label>
+            <input type="text" name="date_time" class="form-control" id="date_time" aria-describedby="emailHelp">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Data</button>
+    </form>
+</div>
+{% endblock %}
