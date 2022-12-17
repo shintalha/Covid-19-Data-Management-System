@@ -50,6 +50,21 @@ class hospital_and_icu:
         finally:
             cursor.close()
             return result
+        
+    def selectFromLOCandDateReturnID(self, loc_id, date):
+        query = f"""select id from HOSPITAL_AND_ICU
+        WHERE (location_id = '{loc_id}' and date_time = '{date}')""" 
+        self.con_control()
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            result = cursor.fetchone()
+        except psycopg2.DatabaseError:  
+            self.connection.rollback()
+            result = None
+        finally:
+            cursor.close()
+            return result
     
     def selectFromLOC(self, location_id, offset):
         query = f"""SELECT location_id, date_time, icu_patients ,
