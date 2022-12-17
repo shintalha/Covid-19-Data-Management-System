@@ -2,92 +2,102 @@
 {% block title %}Country{% endblock %}
 {% block content %}
 
+
 <div class="mx-auto m-3 p-3" style="width: 25%;">
-    <ul class="nav nav-pills" id="myTab">
-        <li class="nav-item"style="width: 25%;">
-            <a href="#login" class="nav-link active" data-bs-toggle="tab">Login</a>
-        </li>
-        <li class="nav-item"style="width: 25%;">
-            <a href="#register" class="nav-link" data-bs-toggle="tab">Register</a>
-        </li>
-    </ul>
-        <br/>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
 
-    <div class="tab-content">
-        <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="tab-login">
-          <form>
-      
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-              <input type="email" id="loginName" class="form-control" />
-              <label class="form-label" for="loginName">Email or username</label>
-            </div>
-      
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-              <input type="password" id="loginPassword" class="form-control" />
-              <label class="form-label" for="loginPassword">Password</label>
-            </div>
-      
-            <!-- 2 column grid layout -->
-            
-            <label class="form-label" for="loginPassword">Login as admin</label>
-            <input type="checkbox" />
-            <input type="password" id="adminPassword" placeholder="admin password"/> <br />
+  {% for message in messages %}
+  <p class="text-danger text-start fs-3 fw-bold">{{message}}</p>
+  {% endfor %}
 
+  {% endif %}
+  {% endwith %}
+  <ul class="nav nav-pills" id="myTab">
+    <li class="nav-item" style="width: 25%;">
+      <a href="#login" class="nav-link active" data-bs-toggle="tab">Login</a>
+    </li>
+    <li class="nav-item" style="width: 25%;">
+      <a href="#register" class="nav-link" data-bs-toggle="tab">Register</a>
+    </li>
+  </ul>
+  <br />
 
-            
-      
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
-      
-          </form>
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="tab-login">
+      <form action="/?check=True" method="POST">
+
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <input type="email" id="loginName" name="mailLogin" class="form-control" />
+          <label class="form-label" for="loginName">Email or username</label>
         </div>
-        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="tab-register">
-          <form>
-      
-            <!-- Name input -->
-            <div class="form-outline mb-4">
-              <input type="text" id="registerName" class="form-control" />
-              <label class="form-label" for="registerName">Name</label>
-            </div>
-      
-            <!-- Username input -->
-            <div class="form-outline mb-4">
-              <input type="text" id="regiterSurName" class="form-control" />
-              <label class="form-label" for="regiterSurName">Surname</label>
-            </div>
-      
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-              <input type="email" id="registerEmail" class="form-control" />
-              <label class="form-label" for="registerEmail">Email</label>
-            </div>
-      
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-              <input type="password" id="registerPassword" class="form-control" />
-              <label class="form-label" for="registerPassword">Password</label>
-            </div>
-      
-            <!-- Repeat Password input -->
-            <div class="form-outline mb-4">
-              <input type="password" id="registerRepeatPassword" class="form-control" />
-              <label class="form-label" for="registerRepeatPassword">Repeat password</label>
-            </div>
-      
-            <!-- Checkbox -->
-            
-                <label class="form-label" for="loginPassword">Login as admin</label>
-                <input type="checkbox" />
-                <input type="password" id="adminPassword" placeholder="admin password"/> <br /> <br />
-      
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
-          </form>
+
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <input type="password" id="loginPassword" name="passwordLogin" class="form-control" />
+          <label class="form-label" for="loginPassword">Password</label>
         </div>
-      </div>
-      <!-- Pills content -->
+
+        <!-- 2 column grid layout -->
+
+        <label class="form-label" for="loginPassword">Login as admin</label>
+        <input type="checkbox" />
+        <input type="password" id="adminPassword" placeholder="admin password" /> <br />
 
 
-{% endblock %}
+
+
+        <!-- Submit button -->
+        <button id="loginButton" type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+
+      </form>
+    </div>
+    <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="tab-register">
+      <form action="/?check=False" method="POST">
+
+        <!-- Name input -->
+        <div class="form-outline mb-4">
+          <input type="text" id="registerName" name="name" class="form-control" />
+          <label class="form-label" for="registerName">Name</label>
+        </div>
+
+        <!-- Username input -->
+        <div class="form-outline mb-4">
+          <input type="text" id="regiterSurName" name="surname" class="form-control" />
+          <label class="form-label" for="regiterSurName">Surname</label>
+        </div>
+
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+          <input type="email" id="registerEmail" name="mail" class="form-control" />
+          <label class="form-label" for="registerEmail">Email</label>
+        </div>
+
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+          <input type="password" id="registerPassword" name="password" class="form-control" />
+          <label class="form-label" for="registerPassword">Password</label>
+        </div>
+
+        <!-- Repeat Password input -->
+        <div class="form-outline mb-4">
+          <input type="password" id="registerRepeatPassword" name="password2" class="form-control" />
+          <label class="form-label" for="registerRepeatPassword">Repeat password</label>
+        </div>
+
+        <!-- Checkbox -->
+
+        <label class="form-label" for="loginPassword">Login as admin</label>
+        <input type="checkbox" name="isAdmin" />
+        <input type="password" id="adminPassword" name="surname" placeholder="admin password" /> <br /> <br />
+
+        <!-- Submit button -->
+        <button id="registerButton" type="submit" class="btn btn-primary btn-block mb-3">Submit</button>
+      </form>
+    </div>
+  </div>
+  <!-- Pills content -->
+
+
+  {% endblock %}

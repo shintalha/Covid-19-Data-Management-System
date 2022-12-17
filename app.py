@@ -8,9 +8,7 @@ from views import *
 app = Flask(__name__)
 app.secret_key = "abc"  
 
-@app.route("/")
-def login_page():
-    return render_template("login.html")
+app.add_url_rule("/", view_func=login_page, methods=["GET", "POST", "POST2"])
 
 app.add_url_rule("/locations", view_func=locations_page)
 app.add_url_rule("/locations/<loc_name>", view_func=location_page)
@@ -26,7 +24,6 @@ app.add_url_rule("/update-cases/<id>", view_func=update_cases_page, methods=["GE
 app.add_url_rule("/add-cases", view_func=add_cases_page, methods=["GET", "POST"])
 
 app.add_url_rule("/home", view_func=home_page, methods=["GET", "POST"])
-app.add_url_rule("/login", view_func=login_page, methods=["GET", "POST"])
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)

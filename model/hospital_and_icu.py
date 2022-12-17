@@ -33,13 +33,17 @@ class hospital_and_icu:
 
     #Selecting by primary key value
     def selectFromLOCandDate(self, loc_id, date):
-        query = f"""select id FROM HOSPITAL_AND_ICU
-        WHERE (location_id = '{loc_id}' and date_time = '{date}')""" 
+        query = f"""select location_id, date_time, icu_patients ,
+        icu_patients_per_million,hosp_patients ,hosp_patients_per_million ,
+        weekly_icu_admissions ,weekly_icu_admissions_per_million ,weekly_hosp_admissions ,
+        weekly_hosp_admissions_per_million FROM HOSPITAL_AND_ICU
+        WHERE (((icu_patients IS NOT NULL) OR (hosp_patients IS NOT NULL)) and 
+        location_id = '{loc_id}' and date_time = '{date}')""" 
         self.con_control()
         try:
             cursor = self.connection.cursor()
             cursor.execute(query)
-            result = cursor.fetchone()
+            result = cursor.fetchall()
         except psycopg2.DatabaseError:  
             self.connection.rollback()
             result = None
