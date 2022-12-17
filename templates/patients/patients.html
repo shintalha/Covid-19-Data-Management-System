@@ -33,6 +33,7 @@
 
                         {% endif %}
                     </select>
+                    <input type="text" name="date" class="form-control" id="date" placeholder="Please enter date in 'YYYY-MM-DD' format">
                 </div>
                 <div class="col-4">
                     <button type="button" id="filter1" class="btn btn-primary w-100 my-3"><a
@@ -41,8 +42,9 @@
                         document.querySelector("#filter1").addEventListener("click", function () {
                             Filter = document.getElementById("Filter")
                             country = document.getElementById("sel_country").value
+                            date = document.getElementById("date").value
                             Filter.href = "/patients?"
-                            Filter.href += "countryName=" + country
+                            Filter.href += "countryName=" + country + "&dateVariable=" + date
                             window.location.replace(Filter.href)
                         });
                     </script>

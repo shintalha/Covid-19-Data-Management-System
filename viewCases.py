@@ -1,37 +1,90 @@
-from flask import render_template, request
+from flask import render_template, request, redirect
 import numpy as np
 from model.locations import Locations
 from model.cases import cases
 
 
 # cases
-def cases_page():
-    # pagination
-    countryName = request.args.get("countryName")
-    pageNumber = request.args.get("pageNumber") if request.args.get(
-        "pageNumber") is not None else "1"
+def cases_page(id = -1):
+    if id != -1:
+        cases.delete(int(id))
+    locations = Locations()    
+    pageNumber = int(request.args.get('page')) if request.args.get('page') is not None else 1
+    countryName = request.args.get('loc_name') if request.args.get('loc_name') is not None else "?"
+
     pageNumber = int(pageNumber)
-    offset = (pageNumber-1)*50
-    paginationValues = (pageNumber, pageNumber+1, pageNumber +
-                        2) if (pageNumber) > 0 else (0, 1, 2)
+    offset = (pageNumber-1)*100
 
     countries = None
     casesData = None
-    headings = ("location_id", "total_cases", "new_cases", "total_cases_per_million",
-                "new_cases_per_million", "new_cases_smoothed_per_million", "date_time")
+    headings = ["Location Id", "Total Cases", "New Cases", "Total Cases PM",
+                "New Cases PM", "New Cases SPM", "Date"]
 
-    countries = Locations.get_country_names()
-    location_id = Locations.get_id_by_country_name(country=countryName)
+    countries = locations.get_country_names()
+    countriesData = []
+    for row in countries:
+        countriesData.append(row[0])
+    
 
-    if countryName is not None:
-        result = cases.findByLocationId(location_id=location_id)
+    location_id = locations.get_id_by_country_name(country=countryName)
+
+    result = None
+    if countryName != '?':
+        result = cases.Get100ByOffsetAndCountry(country=location_id, offset=offset)
     else:
-        result = cases.findAll()
+        result = cases.Get100ByOffset(offset=offset)
 
     casesData = np.zeros([1, 8], dtype='str')
     for row in result:
         newRow = np.array(row)
         casesData = np.vstack([casesData, newRow])
 
-    casesData = np.delete(cases, 0, 0)
-    return render_template("cases/cases.html", paginationValues=paginationValues, headings=headings, cases=casesData, countries=countries)
+    casesData = np.delete(casesData, 0, 0)
+    return render_template("cases/cases.html", table_headers=headings, locations=countriesData, table_rows=casesData)
+
+def update_cases_page(id = -1):
+    message = "empty"
+    updateData = None
+
+    if id != -1:
+        updateData = cases.findById(id=id)
+
+    if request.method == "POST":   
+        cases_id = request.form["cases_id"]
+        location_id = request.form["location_id"]
+        total_cases = request.form["total_cases"]
+        new_cases = request.form["new_cases"]
+        total_cases_per_million = request.form["total_cases_per_million"] if request.form["total_cases_per_million"] !="" else "NULL"
+        new_cases_per_million = request.form["new_cases_per_million"] if request.form["new_cases_per_million"] !="" else "NULL"
+        new_cases_smoothed_per_million = request.form["new_cases_smoothed_per_million"] if request.form["new_cases_smoothed_per_million"] !="" else "NULL"
+        date_time = request.form["date_time"]
+        result = cases.update(cases_id, location_id, total_cases, new_cases, total_cases_per_million, new_cases_per_million, new_cases_smoothed_per_million, date_time)
+        if result:
+            message = "success"  
+        else:
+            message = "failed" 
+    
+    return render_template("cases/update-cases.html", data=updateData, message=message)
+
+def add_cases_page():
+    message = "empty"
+
+    if request.method == "POST":   
+        location_id = request.form["location_id"]
+        total_cases = request.form["total_cases"]
+        new_cases = request.form["new_cases"]
+        total_cases_per_million = request.form["total_cases_per_million"] if request.form["total_cases_per_million"] !="" else "NULL"
+        new_cases_per_million = request.form["new_cases_per_million"] if request.form["new_cases_per_million"] !="" else "NULL"
+        new_cases_smoothed_per_million = request.form["new_cases_smoothed_per_million"] if request.form["new_cases_smoothed_per_million"] !="" else "NULL"
+        date_time = request.form["date_time"]
+        result = cases.save(location_id, total_cases, new_cases, total_cases_per_million, new_cases_per_million, new_cases_smoothed_per_million, date_time)
+        if result:
+            message = "success"  
+        else:
+            message = "failed" 
+    
+    return render_template("cases/add-cases.html", message=message)
+        
+
+
+            

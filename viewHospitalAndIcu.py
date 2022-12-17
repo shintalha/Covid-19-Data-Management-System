@@ -10,6 +10,7 @@ def patients_page():
     connection = hospital_and_icu()
     #pagination
     countryName = request.args.get("countryName")
+    dateFilter = request.args.get("dateVariable")
     pageNumber =request.args.get("pageNumber") if request.args.get("pageNumber") is not None else "1"
     pageNumber = int(pageNumber)
     offset = (pageNumber-1)*50
@@ -21,9 +22,12 @@ def patients_page():
     isadmin = False
     headings = ("icu_patients", "icu_patients_per_million","hosp_patients" ,"hosp_patients_per_million" , "weekly_icu_admissions" ,"weekly_icu_admissions_per_million" ,"weekly_hosp_admissions" ,"weekly_hosp_admissions_per_million")
     isadmin = True
-    if(countryName is not None):
+    if(countryName is not None and dateFilter ==''):
         country_id = location.get_id_by_country_name(countryName)
         result = connection.selectFromLOC(country_id[0], offset)
+    elif(countryName is not None and dateFilter is not None):
+        country_id = location.get_id_by_country_name(countryName)
+        result = connection.selectFromLOCandDate(country_id[0], dateFilter)
     else:
         result = connection.selectAll(offset)
     patients = np.zeros([1, 10], dtype='str')
@@ -149,6 +153,7 @@ def edit_patients_page():
     connection = hospital_and_icu()
     #pagination
     countryName = request.args.get("countryName")
+    dateFilter = request.args.get("dateVariable")
     pageNumber =request.args.get("pageNumber") if request.args.get("pageNumber") is not None else "1"
     pageNumber = int(pageNumber)
     offset = (pageNumber-1)*50
@@ -165,9 +170,12 @@ def edit_patients_page():
         isadmin = False
         headings = ("icu_patients", "icu_patients_per_million","hosp_patients" ,"hosp_patients_per_million" , "weekly_icu_admissions" ,"weekly_icu_admissions_per_million" ,"weekly_hosp_admissions" ,"weekly_hosp_admissions_per_million")
         isadmin = True
-        if(countryName is not None):
+        if(countryName is not None and dateFilter ==''):
             country_id = location.get_id_by_country_name(countryName)
             result = connection.selectFromLOC(country_id[0], offset)
+        elif(countryName is not None and dateFilter is not None):
+            country_id = location.get_id_by_country_name(countryName)
+            result = connection.selectFromLOCandDate(country_id[0], dateFilter)
         else:
             result = connection.selectAll(offset)
         patients = np.zeros([1, 10], dtype='str')

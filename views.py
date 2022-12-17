@@ -13,6 +13,7 @@ from viewCovidTests import *
 from viewDeaths import *
 from viewVaccinations import *
 from viewCases import *
+from viewsLogin import *
 
 def locations_page():
     chart_paths = os.path.join('static', 'charts')
@@ -31,3 +32,5 @@ def location_page(loc_name):
     print(dict(zip(locations_table.columns,loc_info)))
     return render_template("locations/location.html", location_info = dict(zip(locations_table.columns,loc_info)))
 
+def home_page():
+    return render_template("home.html")
