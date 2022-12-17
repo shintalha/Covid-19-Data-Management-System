@@ -1,0 +1,74 @@
+{% extends "after_login.html" %}
+{% block title %}Cases{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    const message = '{{message}}';
+    if (message != "empty") {
+        if (message == "success") {
+            window.alert("Data successfully updated.");
+            window.location.href = "/tests";
+        }
+        else {
+            window.alert("Data could not be updated. Please control the values and try again!.");
+            window.location.href = "/update-tests";
+        }
+    }
+
+</script>
+<h2 class="container my-4">Update Test Data</h2>
+<div class="container my-4">
+    <form action="/update-tests?id={{id}}" method="POST">
+        <div class="mb-3">
+            <label for="total_tests" class="form-label">Total Tests</label>
+            <div class="d-flex">
+                <input type="text" name="total_tests" class="form-control" style="width: 30%;" id="total_tests"
+                    aria-describedby="emailHelp" placeholder="{{data[2]}}">
+                </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_tests" class="form-label">New Tests</label>
+            <div class="d-flex">
+                <input type="text" name="new_tests" class="form-control" style="width: 30%;" id="new_tests"
+                    aria-describedby="emailHelp" placeholder="{{data[3]}}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="total_tests_per_thousand" class="form-label">Total Tests Per Thousand</label>
+            <div class="d-flex">
+                <input type="text" name="total_tests_per_thousand" class="form-control" style="width: 30%;"
+                    id="total_tests_per_thousand" aria-describedby="emailHelp" placeholder="{{data[4]}}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_tests_per_thousand" class="form-label">New Tests Per Thousand</label>
+            <div class="d-flex">
+                <input type="text" name="new_tests_per_thousand" class="form-control" style="width: 30%;"
+                    id="new_tests_per_thousand" aria-describedby="emailHelp" placeholder="{{data[5]}}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_tests_smoothed" class="form-label">New Tests Smoothed</label>
+            <div class="d-flex">
+                <input type="text" name="new_tests_smoothed" class="form-control" style="width: 30%;"
+                    id="new_tests_smoothed" aria-describedby="emailHelp" placeholder="{{data[6]}}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="positive_rate" class="form-label">Positive Rate</label>
+            <div class="d-flex">
+                <input type="text" name="positive_rate" class="form-control" style="width: 30%;" id="positive_rate"
+                    aria-describedby="emailHelp" placeholder="{{data[7]}}">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="date_time" class="form-label">Date (yyyy-mm-dd)</label>
+            <div class="d-flex">
+                <input type="text" name="date_time" class="form-control" style="width: 30%;" id="date_time"
+                    aria-describedby="emailHelp" placeholder="{{data[8]}}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Data</button>
+        <button type="button" href="#" onclick="document.location.href= '/tests'" class="btn btn-primary">Back</button>
+    </form>
+</div>
+{% endblock %}

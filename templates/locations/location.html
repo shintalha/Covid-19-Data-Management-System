@@ -14,15 +14,38 @@
                 <h5 class="fs-6 card-title"><span class="fw-bold me-2">Population:</span> {{ location_info['population']
                     }}
                 </h5>
-                <h5 class="fs-6 card-title"><span class="fw-bold me-2">age_65_older: </span>{{
-                    location_info['age_65_older'] }}
+                <h5 class="fs-6 card-title"><span style="display: inline;" class="fw-bold me-2">age_65_older: </span>
+                    {% if location_info['age_65_older'] == null %}
+                        <p style="display: inline;" >None</p>
+                    {% else %}
+                        <p style="display: inline;" >{{location_info['age_65_older'] }}</p>
+                    {% endif %}
+                    
                 </h5>
-                <h5 class="fs-6 card-title"><span class="fw-bold me-2">age_70_older: </span>{{
-                    location_info['age_70_older'] }}</h5>
-                <h5 class="fs-6 card-title"><span class="fw-bold me-2">median_age:</span> {{
-                    location_info['median_age'] }}</h5>
-                <h5 class="fs-6 card-title"><span class="fw-bold me-2">continent:</span> {{
-                    location_info['continent'] }}</h5>
+                <h5 class="fs-6 card-title"><span style="display: inline;" class="fw-bold me-2">age_70_older: </span>
+                    {% if location_info['age_70_older'] == null %}
+                        <p style="display: inline;" >None</p>
+                    {% else %}
+                        <p style="display: inline;" >{{location_info['age_70_older'] }}</p>
+                    {% endif %}
+                    
+                </h5>
+                <h5 class="fs-6 card-title"><span style="display: inline;" class="fw-bold me-2">median_age: </span>
+                    {% if location_info['median_age'] == null %}
+                        <p style="display: inline;" >None</p>
+                    {% else %}
+                        <p style="display: inline;" >{{location_info['median_age'] }}</p>
+                    {% endif %}
+                    
+                </h5>
+                <h5 class="fs-6 card-title"><span style="display: inline;" class="fw-bold me-2">continent: </span>
+                    {% if location_info['continent'] == null %}
+                        <p style="display: inline;" >None</p>
+                    {% else %}
+                        <p style="display: inline;" >{{location_info['continent'] }}</p>
+                    {% endif %}
+                    
+                </h5>
             </div>
         </div>
     </div>

@@ -18,6 +18,11 @@ app.add_url_rule("/patients/add", view_func=add_patients_data, methods=["GET", "
 app.add_url_rule("/patients/update", view_func=update_patients_data, methods=["GET", "POST"])
 app.add_url_rule("/patients/edit", view_func=edit_patients_page, methods=["GET", "POST"])
 
+app.add_url_rule("/tests", view_func=tests_page, methods=["GET", "POST"])
+app.add_url_rule("/add-tests", view_func=add_tests_page, methods=["GET", "POST"])
+app.add_url_rule("/update-tests", view_func=update_tests_page, methods=["GET", "POST"])
+app.add_url_rule("/tests/<id>", view_func=tests_page, methods=["GET", "POST"])
+
 app.add_url_rule("/cases", view_func=cases_page, methods=["GET", "POST"])
 app.add_url_rule("/cases/<id>", view_func=cases_page, methods=["GET", "POST"])
 app.add_url_rule("/update-cases", view_func=update_cases_page, methods=["GET", "POST"])

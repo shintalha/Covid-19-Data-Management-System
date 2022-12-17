@@ -33,6 +33,7 @@
               <a class="navbar-brand col-2 me-0" href="{{ url_for('locations_page')}}">Country Data</a>
               <a class="navbar-brand col-2 me-0" href="{{ url_for('patients_page')}}">Patients Data</a>
               <a class="navbar-brand col-2 me-0" href="{{ url_for('cases_page')}}">Cases Data</a>
+              <a class="navbar-brand col-2 me-0" href="{{ url_for('tests_page')}}">Tests</a>
             </div>
           </div>
           <div class="col-4">
@@ -48,13 +49,8 @@
     <!-- Jinja template engine renders it -->
   </div>
 
-  <footer class="bg-light text-center text-lg-start">
-    <!-- Copyright -->
-    <div class="text-center p-19" style="background-color: rgba(0, 0, 0, 0.2);">
-      © 2022 Copyright. DB2218 <br>
-      All rights reserved.
-    </div>
-    <!-- Copyright -->
+  <footer style="background-color: #1f76b4;" class="py-3 my-4">
+    <p style="color: white;" class="text-center">© 2022 Company, Inc</p>
   </footer>
 
   {% block script %}
