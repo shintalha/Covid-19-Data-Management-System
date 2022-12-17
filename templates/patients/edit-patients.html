@@ -91,11 +91,13 @@
                 </tbody>
                 <script type="text/javascript">
                     function deleteQuery(row) {
-                        const urlStr = window.location.search;
-                        if (row.value != "")
-                            window.location.href = "/patients/edit?" + row.value;
-                        else
-                            window.location.href = "/patients/edit";
+                        if (confirm('Are you sure you want to delete this record?')){
+                            const urlStr = window.location.search;
+                            if (row.value != "")
+                                window.location.href = "/patients/edit?" + row.value;
+                            else
+                                window.location.href = "/patients/edit";
+                        }
                     }
                 </script>
             </table>
