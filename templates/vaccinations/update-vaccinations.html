@@ -1,0 +1,109 @@
+{% extends "after_login.html" %}
+{% block title %}Vaccinations{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    const message = '{{message}}';
+    function fetchData(id) {
+        if (id != "") {
+            window.location.href = "/update-vaccinations/" + id;
+            document.getElementById('vaccinations_id').value = id;
+        }
+        else
+            window.alert("Please enter an id and push to Fetch Data buton after that.");
+    }
+
+    if (message != "empty") {
+        if (message == "success") {
+            window.alert("Data successfully updated.");
+            window.location.href = "/vaccinations";
+        }
+        else {
+            window.alert("Data could not be updated. Please control the values and try again!.");
+            window.location.href = "/update-vaccinations";
+        }
+    }
+
+</script>
+<h2 class="container my-4">Update Vaccinations Data By Id</h2>
+<div class="container my-4">
+    <form action="/update-vaccinations" method="POST">
+        <div class="mb-3">
+            <label for="vaccinations_id" class="form-label">Id - You can see old values of data you want to update by entering
+                id and press the Fetch button.</label>
+            <div class="d-flex align-items-center">
+                <input type="text" name="vaccinations_id" class="form-control" style="width: 30%;" value="{{data[0]}}"
+                    id="vaccinations_id" aria-describedby="emailHelp">
+                <button class="btn btn-blue btn-outline-secondary" style="margin-left: 10px; margin-right: 10px;"
+                    type="button" onclick="fetchData(document.getElementById('vaccination_id').value)">Fetch</button>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="location_id" class="form-label">Location Id</label>
+            <div class="d-flex">
+                <input type="text" name="location_id" class="form-control" style="width: 30%;" id="location_id"
+                    aria-describedby="emailHelp">
+                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[1]}}</label>
+            </div>
+
+        </div>
+        <div class="mb-3">
+            <label for="total_vaccinations" class="form-label">Total Vaccinations</label>
+            <div class="d-flex">
+                <input type="text" name="total_vaccinations" class="form-control" style="width: 30%;" id="total_vaccinations"
+                    aria-describedby="emailHelp">
+                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[2]}}</label>
+            </div>
+
+        </div>
+        <div class="mb-3">
+            <label for="people_vaccinated" class="form-label">People Vaccinated</label>
+            <div class="d-flex">
+                <input type="text" name="people_vaccinated" class="form-control" style="width: 30%;" id="people_vaccinated"
+                    aria-describedby="emailHelp">
+                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[3]}}</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="people_fully_vaccinated" class="form-label">People Fully Vaccinated</label>
+            <div class="d-flex">
+                <input type="text" name="people_fully_vaccinated" class="form-control" style="width: 30%;"
+                    id="people_fully_vaccinated" aria-describedby="emailHelp">
+                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[4]}}</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="total_boosters" class="form-label">Total Boosters</label>
+            <div class="d-flex">
+                <input type="text" name="total_boosters" class="form-control" style="width: 30%;"
+                    id="total_boosters" aria-describedby="emailHelp">
+                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[5]}}</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_vaccinations" class="form-label">New Vaccinations</label>
+            <div class="d-flex">
+                <input type="text" name="new_vaccinations" class="form-control" style="width: 30%;"
+                    id="new_vaccinations" aria-describedby="emailHelp">
+                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[6]}}</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_vaccinations_smoothed" class="form-label">New Vaccinations Smoothed</label>
+            <div class="d-flex">
+                <input type="text" name="new_vaccinations_smoothed" class="form-control" style="width: 30%;"
+                    id="new_vaccinations_smoothed" aria-describedby="emailHelp">
+                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[6]}}</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="vaccinations_date" class="form-label">Date (yyyy-mm-dd)</label>
+            <div class="d-flex">
+                <input type="text" name="date_time" class="form-control" style="width: 30%;" id="date_time"
+                    aria-describedby="emailHelp">
+                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[7]}}</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Data</button>
+    </form>
+</div>
+{% endblock %}
