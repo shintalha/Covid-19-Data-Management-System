@@ -3,36 +3,37 @@
 {% block content %}
 
 <script>
-  function goToLocation(event) {
+  function goToLocation(event)
+  {
     let location_name = document.getElementById("location").value;
-    window.location.href = "/locations/" + location_name;
+    window.location.href = "/locations/"+location_name;
   }
 </script>
 
 
 <div class="row">
-  <div class="d-flex justify-content-center">
-    <div class="w-75 p-3">
-      <div class="col-55">
-        <div class="row justify-content-start align-items-center">
-          <div class="col-10">
-            <select id="location" class="form-select" name="country" aria-label=".form-select-sm example">
-              <datalist id="locations">
-                {% for loc in locations %}
-                <option>{{loc}}</option>
-                {% endfor %}
-              </datalist>
-            </select>
-          </div>
-          <div class="col-2">
-            <button type="button" id="filter1" class="btn btn-primary w-100 my-3"><a
-                class="link-light text-decoration-none" id="Filter" href="#" onclick="goToLocation()">Go</a>
-            </button>
-          </div>
-        </div>
-      </div>
+<div class="d-flex justify-content-center">
+  <div class="w-75 p-3" >
+    <div class="col-55">
+      <div class="row justify-content-start align-items-center">
+    <div class="col-10">
+              <select id="location" class="form-select" name="country" aria-label=".form-select-sm example">
+                <datalist id="locations">
+                  {% for loc in locations %}
+                  <option>{{loc}}</option>
+                  {% endfor %}
+                  </datalist>
+              </select>
     </div>
+<div class="col-2">
+  <button type="button" id="filter1" class="btn btn-primary w-100 my-3"><a
+          class="link-light text-decoration-none" id="Filter" href="#" onclick="goToLocation()">Go</a>
+  </button>
+     </div>
+    </div>
+   </div>
   </div>
+ </div>
 </div>
 
 
@@ -41,70 +42,84 @@
 
 
 <div class="d-flex justify-content-center mb-4 my-4">
-  <button class="selfButton position-relative btn btn-dark " style="margin-right: 10px;" type="button"
-    data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+  <button class="selfButton position-relative btn btn-dark " style="margin-right: 10px;" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
     <span class="carousel-control-prev-icon"></span>
     <span class="visually-hidden">Previous</span>
   </button>
-  <button class="selfButton position-relative btn btn-dark" type="button" data-bs-target="#carouselExampleControls"
-    data-bs-slide="next">
+  <button class="selfButton position-relative btn btn-dark" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
-  </button>
+</button>
 </div>
 
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-12">
-            <div class="card">
-              <img src="{{charts[0]}}" class="card-img-top" alt="Fissure in Sandstone" />
-              <div class="card-body">
-                <h5 class="card-title">Percentage of People Older Than 65 By Continent</h5>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="container">
+            <div class="row">
+              <div class="col-lg-6 col-md-12">
+                <div class="card">
+                  <img
+                    src="{{charts[0]}}"
+                    class="card-img-top"
+                    alt="Fissure in Sandstone"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Percentage of People Older Than 65 By Continent</h5>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="col-lg-6 d-none d-lg-block">
+                <div class="card">
+                  <img
+                    src="{{charts[1]}}"
+                    class="card-img-top"
+                    alt="Storm Clouds"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Percentage of People Older Than 70 By Continent</h5>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div class="col-lg-6 d-none d-lg-block">
-            <div class="card">
-              <img src="{{charts[1]}}" class="card-img-top" alt="Storm Clouds" />
-              <div class="card-body">
-                <h5 class="card-title">Percentage of People Older Than 70 By Continent</h5>
-              </div>
-            </div>
-          </div>
-        </div>
+          </div>  
       </div>
-    </div>
-    <div class="carousel-item">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-12">
-            <div class="card">
-              <img src="{{charts[2]}}" class="card-img-top" alt="Fissure in Sandstone" />
-              <div class="card-body">
-                <h5 class="card-title">Population Means By Continent</h5>
+      <div class="carousel-item">
+        <div class="container">
+            <div class="row">
+              <div class="col-lg-6 col-md-12">
+                <div class="card">
+                  <img
+                    src="{{charts[2]}}"
+                    class="card-img-top"
+                    alt="Fissure in Sandstone"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Population Means By Continent</h5>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="col-lg-6 d-none d-lg-block">
+                <div class="card">
+                  <img
+                    src="{{charts[3]}}"
+                    class="card-img-top"
+                    alt="Storm Clouds"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">Median Ages By Continent</h5>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-
-          <div class="col-lg-6 d-none d-lg-block">
-            <div class="card">
-              <img src="{{charts[3]}}" class="card-img-top" alt="Storm Clouds" />
-              <div class="card-body">
-                <h5 class="card-title">Median Ages By Continent</h5>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
       </div>
     </div>
   </div>
-</div>
-</div>
 
 
 {% endblock %}
