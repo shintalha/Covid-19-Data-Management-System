@@ -8,7 +8,7 @@
             window.location.href = "/update-cases/" + id;
             document.getElementById('cases_id').value = id;
         }
-        else 
+        else
             window.alert("Please enter an id and push to Fetch Data buton after that.");
     }
 
@@ -20,68 +20,78 @@
         else {
             window.alert("Data could not be updated. Please control the values and try again!.");
             window.location.href = "/update-cases";
-        }     
+        }
     }
-    
+
 </script>
 <h2 class="container my-4">Update Cases Data By Id</h2>
 <div class="container my-4">
     <form action="/update-cases" method="POST">
         <div class="mb-3">
-            <label for="cases_id" class="form-label">Id - You can see old values of data you want to update by entering id and press the Fetch button.</label>
+            <label for="cases_id" class="form-label">Id - You can see old values of data you want to update by entering
+                id and press the Fetch button.</label>
             <div class="d-flex align-items-center">
-                <input type="text" name="cases_id" class="form-control" style="width: 30%;" value="{{data[0]}}" id="cases_id" aria-describedby="emailHelp">
-                <button class="btn btn-blue btn-outline-secondary" style="margin-left: 10px; margin-right: 10px;" type="button" onclick="fetchData(document.getElementById('cases_id').value)">Fetch</button>
-            </div>  
+                <input type="text" name="cases_id" class="form-control" style="width: 30%;" value="{{data[0]}}"
+                    id="cases_id" aria-describedby="emailHelp">
+                <button class="btn btn-blue btn-outline-secondary" style="margin-left: 10px; margin-right: 10px;"
+                    type="button" onclick="fetchData(document.getElementById('cases_id').value)">Fetch</button>
+            </div>
         </div>
         <div class="mb-3">
             <label for="location_id" class="form-label">Location Id</label>
             <div class="d-flex">
-                <input type="text" name="location_id" class="form-control" style="width: 30%;" id="location_id" aria-describedby="emailHelp">
+                <input type="text" name="location_id" class="form-control" style="width: 30%;" id="location_id"
+                    aria-describedby="emailHelp">
                 <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[1]}}</label>
             </div>
-            
+
         </div>
         <div class="mb-3">
             <label for="total_cases" class="form-label">Total Cases</label>
             <div class="d-flex">
-                <input type="text" name="total_cases" class="form-control" style="width: 30%;" id="total_cases" aria-describedby="emailHelp">
+                <input type="text" name="total_cases" class="form-control" style="width: 30%;" id="total_cases"
+                    aria-describedby="emailHelp">
                 <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[2]}}</label>
             </div>
-            
+
         </div>
         <div class="mb-3">
             <label for="new_cases" class="form-label">New Cases</label>
             <div class="d-flex">
-                <input type="text" name="new_cases" class="form-control" style="width: 30%;" id="new_cases" aria-describedby="emailHelp">
+                <input type="text" name="new_cases" class="form-control" style="width: 30%;" id="new_cases"
+                    aria-describedby="emailHelp">
                 <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[3]}}</label>
-            </div>    
+            </div>
         </div>
         <div class="mb-3">
             <label for="total_cases_per_million" class="form-label">Total Cases Per Million</label>
             <div class="d-flex">
-                <input type="text" name="total_cases_per_million" class="form-control" style="width: 30%;" id="total_cases_per_million" aria-describedby="emailHelp">
+                <input type="text" name="total_cases_per_million" class="form-control" style="width: 30%;"
+                    id="total_cases_per_million" aria-describedby="emailHelp">
                 <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[4]}}</label>
             </div>
         </div>
         <div class="mb-3">
             <label for="new_cases_per_million" class="form-label">New Cases Per Million</label>
             <div class="d-flex">
-                <input type="text" name="new_cases_per_million" class="form-control" style="width: 30%;" id="new_cases_per_million" aria-describedby="emailHelp">
+                <input type="text" name="new_cases_per_million" class="form-control" style="width: 30%;"
+                    id="new_cases_per_million" aria-describedby="emailHelp">
                 <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[5]}}</label>
             </div>
         </div>
         <div class="mb-3">
             <label for="new_cases_smoothed" class="form-label">New Cases Smoothed Per Million</label>
             <div class="d-flex">
-                <input type="text" name="new_cases_smoothed_per_million" class="form-control" style="width: 30%;" id="new_cases_smoothed_per_million" aria-describedby="emailHelp">
+                <input type="text" name="new_cases_smoothed_per_million" class="form-control" style="width: 30%;"
+                    id="new_cases_smoothed_per_million" aria-describedby="emailHelp">
                 <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[6]}}</label>
             </div>
         </div>
         <div class="mb-3">
             <label for="new_cases_smoothed_per_million" class="form-label">Date (yyyy-mm-dd)</label>
             <div class="d-flex">
-                <input type="text" name="date_time" class="form-control" style="width: 30%;" id="date_time" aria-describedby="emailHelp">
+                <input type="text" name="date_time" class="form-control" style="width: 30%;" id="date_time"
+                    aria-describedby="emailHelp">
                 <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[7]}}</label>
             </div>
         </div>

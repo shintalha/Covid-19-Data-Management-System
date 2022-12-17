@@ -3,20 +3,20 @@
 {% block content %}
 <script type="text/javascript">
     function goNewDirect(pageToggle, page, loc) {
-        
+
         locStr = "";
         if (loc != null && loc != '')
             locStr = "&loc_name=" + loc;
-        
+
         if (page == null) {
             window.location.href = "/cases?page=2" + locStr;
         }
         else {
-            if (pageToggle == 0 && parseInt(page)-1 >= 1) {
-                window.location.href = "/cases?page=" + (parseInt(page)-1).toString() + locStr;
+            if (pageToggle == 0 && parseInt(page) - 1 >= 1) {
+                window.location.href = "/cases?page=" + (parseInt(page) - 1).toString() + locStr;
             }
             if (pageToggle == 1)
-                window.location.href = "/cases?page=" + (parseInt(page)+1).toString() + locStr;
+                window.location.href = "/cases?page=" + (parseInt(page) + 1).toString() + locStr;
         }
     }
 
@@ -75,17 +75,22 @@
                 {% endfor %}
             </select>
             <button class="btn btn-outline-secondary" type="button" onclick="filterCountry()">Filter</button>
-            <button class="btn btn-outline-secondary" id="resetGroupButton02" onclick="reset('l')" type="button">Reset</button>
+            <button class="btn btn-outline-secondary" id="resetGroupButton02" onclick="reset('l')"
+                type="button">Reset</button>
         </div>
         <div class="col">
-            <button class="btn btn-outline-secondary" type="button" onclick="document.location.href = '/update-cases' ">Update</button>
-            <button class="btn btn-outline-secondary" type="button" onclick="document.location.href = '/add-cases' ">Add</button>
+            <button class="btn btn-outline-secondary" type="button"
+                onclick="document.location.href = '/update-cases' ">Update</button>
+            <button class="btn btn-outline-secondary" type="button"
+                onclick="document.location.href = '/add-cases' ">Add</button>
         </div>
         <div class="col">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end mb-0">
-                    <li class="page-item"><button class="btn btn-outline-secondary" style="margin-right: 5px;" onclick="changePage(0)" type="button">PREV</button></li>
-                    <li class="page-item"><button class="btn btn-outline-secondary" onclick="changePage(1)" type="button">NEXT</button></li>
+                    <li class="page-item"><button class="btn btn-outline-secondary" style="margin-right: 5px;"
+                            onclick="changePage(0)" type="button">PREV</button></li>
+                    <li class="page-item"><button class="btn btn-outline-secondary" onclick="changePage(1)"
+                            type="button">NEXT</button></li>
                 </ul>
             </nav>
         </div>
@@ -94,7 +99,7 @@
         <table class="table align-middle table-striped table-hover">
             <thead>
                 <tr class="align-bottom">
-                    
+
                     {% for head in table_headers %}
                     <th scope="col">"{{head}}"</th>
                     {% endfor %}
@@ -113,9 +118,10 @@
                     {% endfor %}
                     <td>
                         <div class="data">
-                            <button class="btn btn-outline-secondary" style="background-color: red;" href="#" id="delete{{ row[0] }}"
-                                value="{{ row[0] }}" onclick="deleteRow(document.getElementById('delete{{ row[0] }}'))"
-                                type="button"><i class="bi bi-trash" style="color: white;"></i>
+                            <button class="btn btn-outline-secondary" style="background-color: red;" href="#"
+                                id="delete{{ row[0] }}" value="{{ row[0] }}"
+                                onclick="deleteRow(document.getElementById('delete{{ row[0] }}'))" type="button"><i
+                                    class="bi bi-trash" style="color: white;"></i>
                             </button>
                         </div>
                     </td>
