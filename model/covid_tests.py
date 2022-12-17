@@ -11,7 +11,7 @@ class CovidTests:
     # Initialize object and connect to database
     def __init__(self):
         self.columns = ("location_id", "total_tests", "new_tests", "total_tests_per_thousand", "new_tests_per_thousand", "new_tests_smoothed", "positive_rate", "date_time")
-        self.conn = None
+        self.conn = self.connect()
         self.cusor = None
     
     # Close connection to the database and destruct
@@ -91,7 +91,7 @@ class CovidTests:
 
     # Read a row by id
     def read_by_id(self, id):
-        query = """SELECT * FROM COVID_TESTS AS CT WHERE CT.id = %s;"""
+        query = """SELECT * FROM COVID_TESTS AS CT WHERE CT.id = %s ORDER BY CT.id;"""
         self.check_conn()
         try:
             self.cursor = self.conn.cursor()
@@ -103,27 +103,19 @@ class CovidTests:
             self.cursor.close()
 
 
-    def read(self, limit=-1, offset=0, loc_name="?", date="?",end_date="?" ):
+    def read_filter(self, limit=-1, offset=0, loc_name="?", date="?"):
         date_str = ""
         query = "SELECT * FROM COVID_TESTS AS CT" 
         if loc_name!="?":
             query += " LEFT JOIN LOCATIONS AS L ON CT.location_id = L.location_id WHERE country=%(loc_name)s"
         if date!="?":
-            if end_date!="?":
-                date_str = " date_time > TO_DATE(%(date)s,'YYYY-MM-DD')"
-            else:
-                date_str = " date_time = TO_DATE(%(date)s,'YYYY-MM-DD')"
+            date_str = " date_time >= TO_DATE(%(date)s,'YYYY-MM-DD')"
         if loc_name=="?" and date!="?":
             query += " WHERE" + date_str
         elif loc_name!="?" and date!="?":
             query += " AND" + date_str
-        
-        # we cannot use end date without entring start date
-        # that's why we can append AND directly
-        if end_date!="?": 
-            query += " AND date_time < TO_DATE(%(end_date)s,'YYYY-MM-DD')"
 
-        query += " OFFSET %(offset)s"
+        query += " ORDER BY CT.id OFFSET %(offset)s"
         if limit != -1:
             query += " LIMIT " + str(limit)
         query += ";"
@@ -132,8 +124,7 @@ class CovidTests:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query, {"offset":str(offset),
                                         "loc_name":loc_name,
-                                        "date":date,
-                                        "end_date":end_date})
+                                        "date":date})
             return self.cursor.fetchall()
         except ps.DatabaseError:  
             self.conn.rollback()
@@ -208,7 +199,9 @@ class CovidTests:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query, (id,))
             self.conn.commit()
+            return True
         except ps.DatabaseError:  
             self.conn.rollback()
+            return False
         finally:
             self.cursor.close()
