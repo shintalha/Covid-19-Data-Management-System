@@ -38,8 +38,8 @@ class Deaths:
             self.connect()
 
     #Read by id(will be used if necessary)
-    def readFromId(self):
-        query = """SELECT * FROM DEATHS AS dt WHERE dt.id = %s""" 
+    def read_with_id(self, id):
+        query = """SELECT * FROM DEATHS AS d WHERE d.id = %s ORDER BY d.id;"""
         self.check_connection()
         try:
             self.cursor = self.connection.cursor()
@@ -49,7 +49,6 @@ class Deaths:
             self.connection.rollback()
         finally:
             self.cursor.close()
-            self.connection.close()
 
     #Read all
     def readAll(self):
@@ -128,7 +127,7 @@ class Deaths:
 
 #Delete row by id
     def delete(self, id):
-        query = """DELETE FROM DEATHS AS dt WHERE dt.id = %s""" 
+        query = """DELETE FROM DEATHS AS d WHERE d.id = %s""" 
         self.check_connection()
         try:
             self.cursor = self.connection.cursor()
@@ -140,8 +139,7 @@ class Deaths:
             return False
         finally:
             self.cursor.close()
-            self.connection.close()
-
+            
 
     def get_location_names(self):
         loc_names = np.array(self.query_location_names())
