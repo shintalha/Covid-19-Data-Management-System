@@ -22,12 +22,20 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
         <div class="row w-100 d-flex justify-between">
-          <div class="col-8">
+          <div class="col-12">
             <div class="row d-flex">
+              {% if isHome %}
+              <div class="col-2 d-flex justify-content-center">
+                <a class="navbar-brand me-0" href="{{ url_for('home_page')}}"> COVID19</a>
+              </div>
+              <div class="col-8"></div>
+              <div class="col-2 d-flex justify-content-center">
+                <a class="btn btn-danger me-0 justify-end mb-0" href="{{ url_for('login_page')}}">Log out</a>
+              </div>
+              {% else %}
               <a class="navbar-brand col-2 me-0" href="{{ url_for('login_page')}}"> COVID19</a>
+              {% endif %}
             </div>
-          </div>
-          <div class="col-4">
           </div>
         </div>
       </div>

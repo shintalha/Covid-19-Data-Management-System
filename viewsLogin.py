@@ -21,7 +21,7 @@ def login_page():
                     return redirect("/")
                 else:
                     session["id"] = information[1]
-                    return render_template("home.html")
+                    return render_template("home.html", isHome=True)
             else:
                 flash("Please enter a mail for log-in")
                 return redirect("/")
