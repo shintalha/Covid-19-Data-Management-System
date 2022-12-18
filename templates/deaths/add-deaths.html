@@ -1,0 +1,82 @@
+{% extends "after_login.html" %}
+{% block title %}Cases{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    const message = '{{message}}';
+
+    if (message != "empty") {
+        if (message == "success") {
+            window.alert("Data successfully added.");
+            window.location.href = "/deaths";
+        }
+        else {
+            window.alert("Data could not be added. Please control the values and try again!.");
+            window.location.href = "/add-deaths";
+        }
+    }
+
+</script>
+<h2 class="container my-4">Add deaths Data</h2>
+<div class="container my-4">
+    <form action="/add-deaths" method="POST">
+        <div class="mb-3">
+            <label for="location_id" class="form-label">Location Id</label>
+            <div class="d-flex">
+                <input type="text" name="location_id" class="form-control" style="width: 30%;" id="location_id"
+                    aria-describedby="emailHelp">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="total_deaths" class="form-label">Total Deaths</label>
+            <div class="d-flex">
+                <input type="text" name="total_deaths" class="form-control" style="width: 30%;" id="total_deaths"
+                    aria-describedby="emailHelp">
+                </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_deaths" class="form-label">New Deaths</label>
+            <div class="d-flex">
+                <input type="text" name="new_deaths" class="form-control" style="width: 30%;" id="new_deaths"
+                    aria-describedby="emailHelp">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_deaths_smoothed_per_million" class="form-label">New Deaths Smoothed Per Million</label>
+            <div class="d-flex">
+                <input type="text" name="new_deaths_smoothed_per_million" class="form-control" style="width: 30%;"
+                    id="new_deaths_smoothed_per_million" aria-describedby="emailHelp">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_deaths_per_million" class="form-label">New Deaths Per Million</label>
+            <div class="d-flex">
+                <input type="text" name="new_deaths_per_million" class="form-control" style="width: 30%;"
+                    id="new_deaths_per_million" aria-describedby="emailHelp">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="total_deaths_per_million" class="form-label">Total Deaths Per Million</label>
+            <div class="d-flex">
+                <input type="text" name="total_deaths_per_million" class="form-control" style="width: 30%;"
+                    id="total_deaths_per_million" aria-describedby="emailHelp">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="new_deaths_smoothed" class="form-label">New Deaths Smoothed</label>
+            <div class="d-flex">
+                <input type="text" name="new_deaths_smoothed" class="form-control" style="width: 30%;" id="new_deaths_smoothed"
+                    aria-describedby="emailHelp">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="date_time" class="form-label">Date (yyyy-mm-dd)</label>
+            <div class="d-flex">
+                <input type="text" name="date_time" class="form-control" style="width: 30%;" id="date_time"
+                    aria-describedby="emailHelp">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Data</button>
+        <button type="button" href="#" onclick="document.location.href= '/deaths'" class="btn btn-primary">Back</button>
+    </form>
+</div>
+{% endblock %}
