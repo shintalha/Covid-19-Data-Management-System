@@ -1,4 +1,4 @@
-from flask import render_template, request, session
+from flask import render_template, request, session, redirect
 import numpy as np
 
 from model.covid_tests import *
@@ -7,9 +7,11 @@ from model.user import *
 def tests_page(id = -1):
     user_id = str(session["id"])
     is_admin = False
-    if user_id is not None:
+    if user_id is not None and user_id != "None":
         user = User()
         is_admin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
 
     page_id = request.args.get('page') if request.args.get('page') is not None else 1
     loc_name = request.args.get('loc_name') if request.args.get('loc_name') is not None else "?"
@@ -19,9 +21,10 @@ def tests_page(id = -1):
     page_id = int(page_id)
 
     covid_tests = CovidTests()
-    if id != -1:
+    
+    if id != -1 and is_admin:
         covid_tests.delete(int(id))
-        
+
     loc_name = loc_name.replace("_"," ")
     
     loc_names = covid_tests.get_location_names()
@@ -45,6 +48,16 @@ def tests_page(id = -1):
 def add_tests_page():
     covid_test = CovidTests()
     message = "empty"
+    user_id = str(session["id"])
+    isAdmin = False
+    if user_id is not None and user_id != "None":
+         user = User()
+         isAdmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+
+    if isAdmin is False:
+        return redirect("/tests")
 
     if request.method == "POST":   
         location_id = request.form["location_id"]
@@ -66,6 +79,17 @@ def update_tests_page():
     row_id = request.args.get('id')
     
     row_id = int(row_id)
+    user_id = str(session["id"])
+    isAdmin = False
+
+    if user_id is not None and user_id != "None":
+        user = User()
+        isAdmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+
+    if isAdmin is False:
+        return redirect("/tests")
 
     covid_test = CovidTests()
     row = np.array(covid_test.read_by_id(row_id))
