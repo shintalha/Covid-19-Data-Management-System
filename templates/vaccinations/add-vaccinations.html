@@ -21,41 +21,62 @@
     <form action="/add-vaccinations" method="POST">
         <div class="mb-3">
             <label for="location_id" class="form-label">Location Id</label>
-            <input type="text" name="location_id" class="form-control" id="location_id" aria-describedby="emailHelp">
+            <div class="d-flex">
+                <input type="text" name="location_id" class="form-control" style="width: 30%;" id="location_id"
+                    aria-describedby="emailHelp">
+            </div>
         </div>
         <div class="mb-3">
             <label for="total_vaccinations" class="form-label">Total Vaccinations</label>
-            <input type="text" name="total_vaccinations" class="form-control" id="total_vaccinations" aria-describedby="emailHelp">
+            <div class="d-flex">
+                <input type="text" name="total_vaccinations" class="form-control" style="width: 30%;" id="total_vaccinations"
+                    aria-describedby="emailHelp">
+                </div>
         </div>
         <div class="mb-3">
             <label for="people_vaccinated" class="form-label">People Vaccinated</label>
-            <input type="text" name="people_vaccinated" class="form-control" id="people_vaccinated" aria-describedby="emailHelp">
+            <div class="d-flex">
+                <input type="text" name="people_vaccinated" class="form-control" style="width: 30%;" id="people_vaccinated"
+                    aria-describedby="emailHelp">
+            </div>
         </div>
         <div class="mb-3">
             <label for="people_fully_vaccinated" class="form-label">People Fully Vaccinated</label>
-            <input type="text" name="people_fully_vaccinated" class="form-control" id="people_fully_vaccinated"
-                aria-describedby="emailHelp">
+            <div class="d-flex">
+                <input type="text" name="people_fully_vaccinated" class="form-control" style="width: 30%;"
+                    id="people_fully_vaccinated" aria-describedby="emailHelp">
+            </div>
         </div>
         <div class="mb-3">
             <label for="total_boosters" class="form-label">Total Boosters</label>
-            <input type="text" name="total_boosters" class="form-control" id="total_boosters"
-                aria-describedby="emailHelp">
+            <div class="d-flex">
+                <input type="text" name="total_boosters" class="form-control" style="width: 30%;"
+                    id="total_boosters" aria-describedby="emailHelp">
+            </div>
         </div>
         <div class="mb-3">
-            <label for="new_vaccinations_smoothed" class="form-label">New Vaccinations</label>
-            <input type="text" name="new_vaccinations" class="form-control"
-                id="new_vaccinations_smoothed_per_million" aria-describedby="emailHelp">
+            <label for="new_vaccinations" class="form-label">New Vaccinations</label>
+            <div class="d-flex">
+                <input type="text" name="new_vaccinations" class="form-control" style="width: 30%;"
+                    id="new_vaccinations" aria-describedby="emailHelp">
+            </div>
         </div>
         <div class="mb-3">
-            <label for="new_vaccinations_smoothed_per_million" class="form-label">New Vaccinations Smoothed</label>
-            <input type="text" name="new_vaccinations_smoothed_per_million" class="form-control"
-                id="new_vaccinations_smoothed_per_million" aria-describedby="emailHelp">
+            <label for="new_vaccinations_smoothed" class="form-label">New Vaccinations Smoothed</label>
+            <div class="d-flex">
+                <input type="text" name="new_vaccinations_smoothed" class="form-control" style="width: 30%;" id="new_vaccinations_smoothed"
+                    aria-describedby="emailHelp">
+            </div>
         </div>
         <div class="mb-3">
-            <label for="vaccinations_date" class="form-label">Date (yyyy-mm-dd)</label>
-            <input type="text" name="date_time" class="form-control" id="date_time" aria-describedby="emailHelp">
+            <label for="date_time" class="form-label">Date (yyyy-mm-dd)</label>
+            <div class="d-flex">
+                <input type="text" name="date_time" class="form-control" style="width: 30%;" id="date_time"
+                    aria-describedby="emailHelp">
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Add Data</button>
+        <button type="submit" class="btn btn-primary">Update Data</button>
+        <button type="button" href="#" onclick="document.location.href= '/vaccinations'" class="btn btn-primary">Back</button>
     </form>
 </div>
 {% endblock %}

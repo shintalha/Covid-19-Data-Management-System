@@ -24,7 +24,10 @@ conn = psycopg2.connect(database="postgres",
                         user="postgres",
                         password="1234",
                         port="5432")
+queryTable = """DROP TABLE IF EXISTS COVID_TESTS;"""
 cursor = conn.cursor()
+cursor.execute(queryTable)
+conn.commit()
 
 
 queryTable = """CREATE TABLE VACCINATIONS(
@@ -38,7 +41,7 @@ queryTable = """CREATE TABLE VACCINATIONS(
     new_vaccinations_smoothed NUMERIC,
     date_time DATE
 );"""
-
+cursor = conn.cursor()
 cursor.execute(queryTable)
 conn.commit()
 insert_row(["iso_code","total_vaccinations","people_vaccinated","people_fully_vaccinated","total_boosters", "new_vaccinations","new_vaccinations_smoothed", "date"], conn, cursor)
