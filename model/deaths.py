@@ -98,9 +98,9 @@ class Deaths:
     def update_row(self, id,location_id,total_deaths,new_deaths,new_deaths_smoothed,total_deaths_per_million,\
                  new_deaths_per_million,new_deaths_smoothed_per_million, date_time):
         
-        query = """UPDATE DEATHS(location_id, total_deaths, new_deaths_smoothed,new_deaths,
+        query = """UPDATE DEATHS SET(location_id, total_deaths, new_deaths_smoothed,new_deaths,
         total_deaths_per_million,new_deaths_per_million,new_deaths_smoothed_per_million,date_time) 
-        VALUES(%(location_id)s,%(total_deaths)s,%(new_deaths_smoothed)s,%(new_deaths)s,%(total_deaths_per_million)s, 
+        = (%(location_id)s,%(total_deaths)s,%(new_deaths_smoothed)s,%(new_deaths)s,%(total_deaths_per_million)s, 
         %(new_deaths_per_million)s, %(new_deaths_smoothed_per_million)s, %(date_time)s) WHERE DEATHS.id = %(id)s"""
         self.check_connection()
         try:
