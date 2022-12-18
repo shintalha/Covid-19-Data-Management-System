@@ -89,10 +89,10 @@ class User:
             cursor = self.connection.cursor()
             cursor.execute(query)
             result = cursor.fetchone()
-            if result.__len__() > 0:
+            if result is not None:
                 return result[0]
             else:
-                return None
+                return result
         except psycopg2.DatabaseError:  
             self.connection.rollback()
             result = None
