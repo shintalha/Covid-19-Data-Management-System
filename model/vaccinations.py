@@ -150,8 +150,8 @@ class Vaccinations:
          people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoothed, date_time):
         query = """INSERT INTO VACCINATIONS(location_id, total_vaccinations, people_vaccinated, 
         people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoothed, date_time) 
-        VALUES(%(iso_code)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully_vaccinated)s,
-        %(total_boosters)s, %(new_vaccinations)s, %(new_vaccinations_smoothed)s, %(date)s)""" 
+        VALUES(%(location_id)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully_vaccinated)s,
+        %(total_boosters)s, %(new_vaccinations)s, %(new_vaccinations_smoothed)s, %(date_time)s)""" 
 
         self.check_conn()
         try:
@@ -176,16 +176,16 @@ class Vaccinations:
 
 
     #Update a row by id
-    def update(self, location_id, total_vaccinations, people_vaccinated, \
+    def update(self, id, location_id, total_vaccinations, people_vaccinated, \
          people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoothed, date_time):
         query = """UPDATE VACCINATIONS SET(location_id, total_vaccinations, people_vaccinated, 
         people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoothed, date_time) 
-        = (%(iso_code)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully_vaccinated)s,
-        %(total_boosters)s, %(new_vaccinations)s, %(new_vaccinations_smoothed)s, %(date)s) WHERE VACCINATIONS.id = %(id)s""" 
+        = (%(location_id)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully_vaccinated)s,
+        %(total_boosters)s, %(new_vaccinations)s, %(new_vaccinations_smoothed)s, %(date_time)s) WHERE VACCINATIONS.id = %(id)s""" 
         self.check_conn()
         try:
             self.cursor = self.conn.cursor()
-            self.cursor.cursor.execute(query, {
+            self.cursor.execute(query, {
                 'id' : id,
                 'location_id': location_id,
                 'total_vaccinations': total_vaccinations,
@@ -197,6 +197,7 @@ class Vaccinations:
                 'date_time': date_time
             })
             self.conn.commit()
+            return True
         except psg.DatabaseError:  
             self.conn.rollback()
             return False
@@ -212,7 +213,9 @@ class Vaccinations:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query, (id,))
             self.conn.commit()
+            return True
         except psg.DatabaseError:  
             self.conn.rollback()
+            return False
         finally:
             self.cursor.close()
