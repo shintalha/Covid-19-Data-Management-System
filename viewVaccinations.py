@@ -6,15 +6,10 @@ from model.user import *
 
 def vaccinations_page(id = -1):
     user_id = str(session["id"])
-    isAdmin = False
-    if user_id is not None and user_id != "None":
+    is_admin = False
+    if user_id is not None:
         user = User()
-        isadmin = user.isAdmin(user_id)
-    else:
-        return redirect("/")
-    
-    if id != -1 and isAdmin:
-        Vaccinations.delete(int(id))
+        is_admin = user.isAdmin(user_id)
 
     page_id = request.args.get('page') if request.args.get('page') is not None else 1
     loc_name = request.args.get('loc_name') if request.args.get('loc_name') is not None else "?"
@@ -45,7 +40,7 @@ def vaccinations_page(id = -1):
     headers = [" ".join(head.split("_")).title() for head in vaccinations.columns]
 
     return render_template("vaccinations/vaccinations.html", table_headers=headers, table_rows = covid_data, \
-        paginationValues=paginationValues, locations = loc_names, dates = start_dates, data_available=table_size, isAdmin=isAdmin) 
+        paginationValues=paginationValues, locations = loc_names, dates = start_dates, data_available=table_size, is_admin=is_admin) 
 
 def add_vaccinations_page():
     vaccinations = Vaccinations()
