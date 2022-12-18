@@ -10,7 +10,9 @@
         }
         else {
             window.alert("Data could not be updated. Please control the values and try again!.");
-            window.location.href = "/update-tests";
+            const urlStr = window.location.search;
+            let urlPage = new URLSearchParams(urlStr);
+            window.location.href = "/update-tests?id="+urlPage.get("id");
         }
     }
 
