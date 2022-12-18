@@ -4,7 +4,7 @@ from model.user import *
 
 def login_page():
     connection = User()
-    
+    session["id"] = None
     if(request.method == "POST"):
         check = request.args.get("check")
         if(check == "True"):
