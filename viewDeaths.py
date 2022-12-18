@@ -1,4 +1,4 @@
-from flask import render_template, request, session
+from flask import render_template, request, session, redirect
 import numpy as np
 
 from model.deaths import *
@@ -10,6 +10,12 @@ def deaths_page(id = -1):
     if user_id is not None:
         user = User()
         is_admin = user.isAdmin(user_id)
+
+    if user_id is not None and user_id != "None":
+         user = User()
+         isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
 
     page_id = request.args.get('page') if request.args.get('page') is not None else 1
     loc_name = request.args.get('loc_name') if request.args.get('loc_name') is not None else "?"
