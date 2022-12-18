@@ -1,13 +1,22 @@
-from flask import render_template, request
+from flask import render_template, request, session
 import numpy as np
 
 from model.covid_tests import *
+from model.user import *
 
 def tests_page(id = -1):
-    page_id = int(request.args.get('page')) if request.args.get('page') is not None else 1
+    user_id = str(session["id"])
+    is_admin = False
+    if user_id is not None:
+        user = User()
+        is_admin = user.isAdmin(user_id)
+
+    page_id = request.args.get('page') if request.args.get('page') is not None else 1
     loc_name = request.args.get('loc_name') if request.args.get('loc_name') is not None else "?"
     date = request.args.get('date') if request.args.get('date') is not None else "?"
     table_size = 0
+
+    page_id = int(page_id)
 
     covid_tests = CovidTests()
     if id != -1:
@@ -28,10 +37,10 @@ def tests_page(id = -1):
         table_size = 0
             
     start_dates = covid_tests.get_dates(loc_name)
-    headers = covid_tests.columns
+    headers = [" ".join(head.split("_")).title() for head in covid_tests.columns]
 
     return render_template("tests/tests.html", table_headers=headers, table_rows = covid_data, \
-        paginationValues=paginationValues, locations = loc_names, dates = start_dates, data_available=table_size) 
+        paginationValues=paginationValues, locations = loc_names, dates = start_dates, data_available=table_size, is_admin=is_admin) 
 
 def add_tests_page():
     covid_test = CovidTests()
@@ -54,7 +63,10 @@ def add_tests_page():
     return render_template("tests/add-tests.html", message=message) 
 
 def update_tests_page():
-    row_id = int(request.args.get('id'))
+    row_id = request.args.get('id')
+    
+    row_id = int(row_id)
+
     covid_test = CovidTests()
     row = np.array(covid_test.read_by_id(row_id))
     message = "empty"
