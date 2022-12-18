@@ -1,4 +1,4 @@
-from flask import render_template, request, session
+from flask import render_template, request, session, redirect
 import numpy as np
 
 from model.vaccinations import *
@@ -6,10 +6,15 @@ from model.user import *
 
 def vaccinations_page(id = -1):
     user_id = str(session["id"])
-    is_admin = False
-    if user_id is not None:
+    isAdmin = False
+    if user_id is not None and user_id != "None":
         user = User()
-        is_admin = user.isAdmin(user_id)
+        isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+    
+    if id != -1 and isAdmin:
+        Vaccinations.delete(int(id))
 
     page_id = request.args.get('page') if request.args.get('page') is not None else 1
     loc_name = request.args.get('loc_name') if request.args.get('loc_name') is not None else "?"
@@ -40,7 +45,7 @@ def vaccinations_page(id = -1):
     headers = [" ".join(head.split("_")).title() for head in vaccinations.columns]
 
     return render_template("vaccinations/vaccinations.html", table_headers=headers, table_rows = covid_data, \
-        paginationValues=paginationValues, locations = loc_names, dates = start_dates, data_available=table_size, is_admin=is_admin) 
+        paginationValues=paginationValues, locations = loc_names, dates = start_dates, data_available=table_size, isAdmin=isAdmin) 
 
 def add_vaccinations_page():
     vaccinations = Vaccinations()

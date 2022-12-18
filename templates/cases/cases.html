@@ -14,7 +14,7 @@
         else {
             if (pageToggle == -1)
                 window.location.href = "/cases?page=" + parseInt(page).toString() + locStr;
-            if (pageToggle == 0 && parseInt(page) - 1 >= 1) 
+            if (pageToggle == 0 && parseInt(page) - 1 >= 1)
                 window.location.href = "/cases?page=" + (parseInt(page) - 1).toString() + locStr;
             if (pageToggle == 1)
                 window.location.href = "/cases?page=" + (parseInt(page) + 1).toString() + locStr;
@@ -106,7 +106,7 @@
             <tbody>
                 {% for row in table_rows%}
                 <tr class="align-items-center">
-                    {% for cell in row[1:] %}
+                    {% for cell in row[0:] %}
                     <td>
                         <div class="data">
                             {{cell}}
@@ -115,13 +115,22 @@
                     {% endfor %}
                     <td>
                         {% if isAdmin %}
-                        <div class="data">
-                            <button class="btn btn-outline-secondary" style="background-color: red;" href="#"
-                                id="delete{{ row[0] }}" value="{{ row[0] }}"
-                                onclick="deleteRow(document.getElementById('delete{{ row[0] }}'))" type="button"><i
-                                    class="bi bi-trash" style="color: white;"></i>
-                            </button>
+                        <div class="d-flex">
+                            <div class="data" style="margin-right: 10px;">
+                                <button class="btn btn-outline-secondary" title="DELETE" style="background-color: red;" href="#"
+                                    id="delete{{ row[0] }}" value="{{ row[0] }}"
+                                    onclick="deleteRow(document.getElementById('delete{{ row[0] }}'))" type="button"><i
+                                        class="bi bi-trash" style="color: white;"></i>
+                                </button>
+                            </div>
+                            <div class="data">
+                                <button class="btn btn-outline-secondary" title="UPDATE" id="delete{{ row[0] }}" value="{{ row[0] }}"
+                                    onclick="document.location.href = '/update-cases/{{ row[0] }}';" type="button">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </button>
+                            </div>
                         </div>
+
                         {% endif %}
                     </td>
                 </tr>
