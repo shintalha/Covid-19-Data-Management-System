@@ -5,9 +5,16 @@ class Locations:
     def __init__(self):
         self.columns = ["location_id","continent","location","population","aged_65_older","aged_70_older","median_age"]
         self.conn = None
+        self.connect()
         self.cursor = None
 
-    #connection to the database
+    def __del__(self):
+        try:
+            self.conn.close()
+        except:
+            pass
+
+    # Connect to the database
     def connect(self):
         self.conn = psycopg2.connect(database="postgres",
                         host="localhost",
@@ -15,10 +22,18 @@ class Locations:
                         password="1234",
                         port="5432")
 
+    # Check connection and connect again if it is closed 
+    def check_conn(self):
+        try:
+            self.conn.status
+        except:
+            self.connect()
+    
+
     #Finding by primary key value
     def find_by_id(self, location_id):
         query = """SELECT * FROM LOCATIONS L WHERE L.location_id = %s""" 
-        self.connect()
+        self.check_conn()
         try:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query, (location_id,))
@@ -27,12 +42,12 @@ class Locations:
             self.conn.rollback()
         finally:
             self.cursor.close()
-            self.conn.close()
+            
     
     #Finding all rows primary key value
     def find_all(self):
         query = """SELECT * FROM LOCATIONS""" 
-        self.connect()
+        self.check_conn()
         try:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query)
@@ -41,12 +56,12 @@ class Locations:
             self.conn.rollback()
         finally:
             self.cursor.close()
-            self.conn.close()
+            
 
     #Deleting a row by id
     def delete(self, location_id):
         query = """DELETE FROM LOCATIONS L WHERE L.location_id = %s""" 
-        self.connect()
+        self.check_conn()
         try:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query, (location_id,))
@@ -55,7 +70,7 @@ class Locations:
             self.conn.rollback()
         finally:
             self.cursor.close()
-            self.conn.close()
+            
 
     #Inserting a new row to the table
     def save(self, location_id, country, population, aged_65_older, aged_70_older, median_age, handwashing_facilities):
@@ -64,7 +79,7 @@ class Locations:
             aged_70_older, median_age, handwashing_facilities) 
         VALUES(%(location_id)s,%(country)s,%(population)s,%(aged_65_older)s,
             %(aged_70_older)s,%(median_age)s,%(handwashing_facilities)s)""" 
-        self.connect()
+        self.check_conn()
         try:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query, {
@@ -81,7 +96,7 @@ class Locations:
             self.conn.rollback()
         finally:
             self.cursor.close()
-            self.conn.close()
+            
         
     #Updating a row by id
     def update(self, location_id, country, population, aged_65_older, aged_70_older, median_age, handwashing_facilities):
@@ -89,7 +104,7 @@ class Locations:
             aged_70_older, median_age, handwashing_facilities) = 
             (%(location_id)s,%(country)s,%(population)s,%(aged_65_older)s,
             %(aged_70_older)s,%(median_age)s,%(handwashing_facilities)s) WHERE LOCATIONS.location_id = %(location_id)s""" 
-        self.connect()
+        self.check_conn()
         try:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query, {
@@ -106,12 +121,12 @@ class Locations:
             self.conn.rollback()
         finally:
             self.cursor.close()
-            self.conn.close()
+            
 
         #Finding by primary key value
     def get_country_names(self):
         query = """SELECT L.country FROM LOCATIONS L""" 
-        self.connect()
+        self.check_conn()
         try:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query)
@@ -120,11 +135,11 @@ class Locations:
             self.conn.rollback()
         finally:
             self.cursor.close()
-            self.conn.close()
+            
     
     def get_id_by_country_name(self, country):
         query = """SELECT L.location_id FROM LOCATIONS L WHERE L.country = %s""" 
-        self.connect()
+        self.check_conn()
         try:
             self.cursor = self.conn.cursor()
             self.cursor.execute(query, (country,))
@@ -133,27 +148,18 @@ class Locations:
             self.conn.rollback()
         finally:
             self.cursor.close()
-            self.conn.close()
-
-    #Connection control
-    def con_control(self):
-        try:
-            self.conn.status()
-        except:
-            self.connect()
+            
 
     def is_there(self, l_id):
         query = f"""SELECT LOCATION_ID FROM LOCATIONS
                 WHERE (LOCATION_ID = '{l_id}')"""
         
-        self.con_control()        
+        self.check_conn()
         try:
-            cursor = self.conn.cursor()
-            cursor.execute(query)
-            result = cursor.fetchone()
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query)
+            return self.cursor.fetchone()
         except psycopg2.DatabaseError:
             self.conn.rollback()
-            result = None
         finally:
-            cursor.close()
-            return result
+            self.cursor.close()
