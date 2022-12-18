@@ -18,7 +18,7 @@ def patients_page():
     paginationValues = (pageNumber,pageNumber+1,pageNumber+2) if (pageNumber)>0 else (0,1,2)
 
     location = Locations()
-    countries = location.get_country_names()
+    countries = connection.get_country_names()
     patients = None
     isadmin = False
     user_id = str(session["id"])
@@ -170,11 +170,9 @@ def edit_patients_page():
         return redirect("/patients/edit")
     else:
         location = Locations()
-        countries = location.get_country_names()
+        countries = connection.get_country_names()
         patients = None
-        isadmin = False
         headings = ("icu_patients", "icu_patients_per_million","hosp_patients" ,"hosp_patients_per_million" , "weekly_icu_admissions" ,"weekly_icu_admissions_per_million" ,"weekly_hosp_admissions" ,"weekly_hosp_admissions_per_million")
-        isadmin = True
         if(countryName is not None and dateFilter ==''):
             country_id = location.get_id_by_country_name(countryName)
             result = connection.selectFromLOC(country_id[0], offset)
@@ -190,7 +188,7 @@ def edit_patients_page():
                 patients = np.vstack([patients, newRow])
 
         patients = np.delete(patients, 0, 0)
-        return render_template("patients/edit-patients.html",headings=headings, isadmin=isadmin,  patients=patients, countries=countries, paginationValues=paginationValues)
+        return render_template("patients/edit-patients.html",headings=headings,  patients=patients, countries=countries, paginationValues=paginationValues)
 
 def delete_patients(country_id,date):
     connection = hospital_and_icu()
