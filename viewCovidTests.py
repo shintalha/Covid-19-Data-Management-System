@@ -34,7 +34,7 @@ def tests_page(id = -1):
 
     try:
         covid_data = np.array(covid_tests.read_filter(50,offset,loc_name,date))[:,0:9]
-        table_size = covid_data.size
+        table_size = covid_data.shape[0]
     except IndexError:
         covid_data = np.array([[]])
         table_size = 0
