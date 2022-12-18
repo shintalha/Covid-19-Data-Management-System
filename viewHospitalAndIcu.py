@@ -22,9 +22,11 @@ def patients_page():
     patients = None
     isadmin = False
     user_id = str(session["id"])
-    if user_id is not None:
+    if user_id is not None and user_id != "None":
         user = User()
         isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
     headings = ("icu_patients", "icu_patients_per_million","hosp_patients" ,"hosp_patients_per_million" , "weekly_icu_admissions" ,"weekly_icu_admissions_per_million" ,"weekly_hosp_admissions" ,"weekly_hosp_admissions_per_million")
     if(countryName is not None and dateFilter ==''):
         country_id = location.get_id_by_country_name(countryName)
@@ -49,6 +51,17 @@ def add_patients_data():
     countries = loc_con.get_country_names()
     headings = ("icu_patients", "icu_patients_per_million","hosp_patients" ,"hosp_patients_per_million" , "weekly_icu_admissions" ,"weekly_icu_admissions_per_million" ,"weekly_hosp_admissions" ,"weekly_hosp_admissions_per_million")
 
+    isadmin = False
+    user_id = str(session["id"])
+    if user_id is not None and user_id != "None":
+        user = User()
+        isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+    
+    if isadmin == False:
+        return redirect("/patients")
+    
     if request.method == "POST":
         if(request.form["country"] and request.form["date"]):
             location_id = request.form["country"]
@@ -104,6 +117,17 @@ def update_patients_data():
     countries = loc_con.get_country_names()
     headings = ("icu_patients", "icu_patients_per_million","hosp_patients" ,"hosp_patients_per_million" , "weekly_icu_admissions" ,"weekly_icu_admissions_per_million" ,"weekly_hosp_admissions" ,"weekly_hosp_admissions_per_million")
 
+    isadmin = False
+    user_id = str(session["id"])
+    if user_id is not None and user_id != "None":
+        user = User()
+        isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+    
+    if isadmin == False:
+        return redirect("/patients")
+    
     if request.method == "POST":
         if(request.form["country"] and request.form["date"]):
             location_id = request.form["country"]
@@ -162,6 +186,19 @@ def edit_patients_page():
     pageNumber = int(pageNumber)
     offset = (pageNumber-1)*50
     paginationValues = (pageNumber,pageNumber+1,pageNumber+2) if (pageNumber)>0 else (0,1,2)
+    
+    
+    isadmin = False
+    user_id = str(session["id"])
+    if user_id is not None and user_id != "None":
+        user = User()
+        isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+    
+    if isadmin == False:
+        return redirect("/patients")
+    
     if(request.args.get("deleteMode") == "on"):
         if(countryName != '' and dateFilter != ''):
             delete_patients(countryName, dateFilter)

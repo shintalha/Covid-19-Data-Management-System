@@ -4,7 +4,6 @@ from flask import Flask, render_template
 
 from views import *
 
-
 app = Flask(__name__)
 app.secret_key = "abc"  
 
@@ -22,6 +21,16 @@ app.add_url_rule("/tests", view_func=tests_page, methods=["GET", "POST"])
 app.add_url_rule("/add-tests", view_func=add_tests_page, methods=["GET", "POST"])
 app.add_url_rule("/update-tests", view_func=update_tests_page, methods=["GET", "POST"])
 app.add_url_rule("/tests/<id>", view_func=tests_page, methods=["GET", "POST"])
+
+app.add_url_rule("/vaccinations", view_func=vaccinations_page, methods=["GET", "POST"])
+app.add_url_rule("/add-vaccinations", view_func=add_vaccinations_page, methods=["GET", "POST"])
+app.add_url_rule("/update-vaccinations", view_func=update_vaccinations_page, methods=["GET", "POST"])
+app.add_url_rule("/vaccinations/<id>", view_func=vaccinations_page, methods=["GET", "POST"])
+
+app.add_url_rule("/deaths", view_func=deaths_page, methods=["GET", "POST"])
+app.add_url_rule("/add-deaths", view_func=add_deaths_page, methods=["GET", "POST"])
+app.add_url_rule("/update-deaths", view_func=update_deaths_page, methods=["GET", "POST"])
+app.add_url_rule("/deaths/<id>", view_func=deaths_page, methods=["GET", "POST"])
 
 app.add_url_rule("/cases", view_func=cases_page, methods=["GET", "POST"])
 app.add_url_rule("/cases/<id>", view_func=cases_page, methods=["GET", "POST"])

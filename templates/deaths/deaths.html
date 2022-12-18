@@ -1,25 +1,28 @@
 {% extends "after_login.html" %}
-{% block title %}Vaccinations{% endblock %}
+{% block title %}Test{% endblock %}
 {% block content %}
-<script type="text/javascript">
-    function goNewDirect(page, loc, date) {
 
+<script type="text/javascript">
+    function goNewDirect(page, loc, date)
+    {
         locStr = "";
         dateStr = "";
-        if (loc != null && loc != '')
-            locStr = "&loc_name=" + loc;
+        if(loc != null && loc != '')
+            locStr = "&loc_name="+loc; 
         if(date != null && date != '')
-            dateStr = "&date="+date; 
-        if (page == null) {
-            window.location.href = "/vaccinations?page=1" + locStr+dateStr;
+            dateStr = "&date="+date;        
+
+        if(page == null)
+        {
+            window.location.href = "/deaths?page=1"+locStr+dateStr;
         }
         else
         {
-            window.location.href = "/vaccinations?page="+page+locStr+dateStr;
+            window.location.href = "/deaths?page="+page+locStr+dateStr;
         }
     }
-
-    function changePage(pageToggle, data_available) {
+    function changePage(pageToggle, data_available)
+    {
         const urlStr = window.location.search;
         let urlPage = new URLSearchParams(urlStr);
         page = urlPage.get("page");
@@ -39,8 +42,7 @@
             if(pageToggle == -1)
                 page = urlPage.get("page");
         }
-
-        goNewDirect(page, urlPage.get('loc_name'), urlPage.get("data"));
+        goNewDirect(page, urlPage.get("loc_name"), urlPage.get("date"));
     }
 
     function checkIfSelected(element)
@@ -55,16 +57,15 @@
         }
         return true;
     }
-
-    function filterCountry() {
+    function filterCountry()
+    {
         let location = document.getElementById("inputGroupSelect01");
-        if (checkIfSelected(location) == false)
-            return;
+        if(checkIfSelected(location) == false) 
+            return;  
         const urlStr = window.location.search;
         let urlPage = new URLSearchParams(urlStr);
         goNewDirect(null, location.value, urlPage.get("date"));
     }
-
     function filterDates(button)
     {
         if(checkIfSelected(button) == false) 
@@ -74,7 +75,6 @@
 
         goNewDirect(null, urlPage.get("loc_name"), button.value);
     }
-
     function reset(type)
     {
         const urlStr = window.location.search;
@@ -84,24 +84,23 @@
         if(type == 's')
             goNewDirect(urlPage.get("page"), urlPage.get("loc_name"), '');
     }
-
-    function deleteRow(row) {
+    function deleteRow(row)
+    {
         const urlStr = window.location.search;
         let urlPage = new URLSearchParams(urlStr);
-        if (row.value != "")
-            window.location.href = "/vaccinations/" + row.value + "?" + urlPage;
+        if(row.value != "")
+            window.location.href = "/deaths/"+row.value+"?"+urlPage;
         else
-            window.location.href = "/vaccinations?" + urlPage;
+        window.location.href = "/deaths?"+urlPage;
     }
-
     function updateRow(row)
     {
         const urlStr = window.location.search;
         let urlPage = new URLSearchParams(urlStr);
         if(row.value == "")
-            window.location.href = "/vaccinations/"+row.value+"?"+urlPage;
+            window.location.href = "/deaths/"+row.value+"?"+urlPage;
         else
-            window.location.href = "/update-vaccinations?id="+row.value;
+            window.location.href = "/update-deaths?id="+row.value;
     }
     
 </script>
@@ -137,7 +136,7 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end mb-0">
                     <li class="page-item"><button style="width: 132px;" class="btn btn-warning" type="button"
-                        onclick="document.location.href = '/add-vaccinations' ">Add</button></li>
+                        onclick="document.location.href = '/add-deaths' ">Add</button></li>
                 </ul>
             </nav>
             {% endif %}
@@ -175,7 +174,7 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end mb-0">
                     <li class="page-item"><button class="btn btn-outline-secondary" id="prev-button" value="{{data_available}}" style="margin-right: 5px;"
-                        onclick="changePage(0,document.getElementById('prev-button').value)" type="button">PREV</button></li>
+                            onclick="changePage(0,document.getElementById('prev-button').value)" type="button">PREV</button></li>
                     <li class="page-item"><button class="btn btn-outline-secondary"  id="next-button" value="{{data_available}}" 
                         onclick="changePage(1,document.getElementById('next-button').value)" type="button">NEXT</button></li>
                 </ul>

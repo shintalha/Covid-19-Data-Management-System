@@ -1,5 +1,5 @@
 {% extends "after_login.html" %}
-{% block title %}Vaccinations{% endblock %}
+{% block title %}Cases{% endblock %}
 {% block content %}
 <script type="text/javascript">
     const message = '{{message}}';
@@ -7,18 +7,18 @@
     if (message != "empty") {
         if (message == "success") {
             window.alert("Data successfully added.");
-            window.location.href = "/vaccinations";
+            window.location.href = "/deaths";
         }
         else {
             window.alert("Data could not be added. Please control the values and try again!.");
-            window.location.href = "/add-vaccinations";
+            window.location.href = "/add-deaths";
         }
     }
 
 </script>
-<h2 class="container my-4">Add Vaccinations Data</h2>
+<h2 class="container my-4">Add deaths Data</h2>
 <div class="container my-4">
-    <form action="/add-vaccinations" method="POST">
+    <form action="/add-deaths" method="POST">
         <div class="mb-3">
             <label for="location_id" class="form-label">Location Id</label>
             <div class="d-flex">
@@ -27,44 +27,44 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="total_vaccinations" class="form-label">Total Vaccinations</label>
+            <label for="total_deaths" class="form-label">Total Deaths</label>
             <div class="d-flex">
-                <input type="text" name="total_vaccinations" class="form-control" style="width: 30%;" id="total_vaccinations"
+                <input type="text" name="total_deaths" class="form-control" style="width: 30%;" id="total_deaths"
                     aria-describedby="emailHelp">
                 </div>
         </div>
         <div class="mb-3">
-            <label for="people_vaccinated" class="form-label">People Vaccinated</label>
+            <label for="new_deaths" class="form-label">New Deaths</label>
             <div class="d-flex">
-                <input type="text" name="people_vaccinated" class="form-control" style="width: 30%;" id="people_vaccinated"
+                <input type="text" name="new_deaths" class="form-control" style="width: 30%;" id="new_deaths"
                     aria-describedby="emailHelp">
             </div>
         </div>
         <div class="mb-3">
-            <label for="people_fully_vaccinated" class="form-label">People Fully Vaccinated</label>
+            <label for="new_deaths_smoothed_per_million" class="form-label">New Deaths Smoothed Per Million</label>
             <div class="d-flex">
-                <input type="text" name="people_fully_vaccinated" class="form-control" style="width: 30%;"
-                    id="people_fully_vaccinated" aria-describedby="emailHelp">
+                <input type="text" name="new_deaths_smoothed_per_million" class="form-control" style="width: 30%;"
+                    id="new_deaths_smoothed_per_million" aria-describedby="emailHelp">
             </div>
         </div>
         <div class="mb-3">
-            <label for="total_boosters" class="form-label">Total Boosters</label>
+            <label for="new_deaths_per_million" class="form-label">New Deaths Per Million</label>
             <div class="d-flex">
-                <input type="text" name="total_boosters" class="form-control" style="width: 30%;"
-                    id="total_boosters" aria-describedby="emailHelp">
+                <input type="text" name="new_deaths_per_million" class="form-control" style="width: 30%;"
+                    id="new_deaths_per_million" aria-describedby="emailHelp">
             </div>
         </div>
         <div class="mb-3">
-            <label for="new_vaccinations" class="form-label">New Vaccinations</label>
+            <label for="total_deaths_per_million" class="form-label">Total Deaths Per Million</label>
             <div class="d-flex">
-                <input type="text" name="new_vaccinations" class="form-control" style="width: 30%;"
-                    id="new_vaccinations" aria-describedby="emailHelp">
+                <input type="text" name="total_deaths_per_million" class="form-control" style="width: 30%;"
+                    id="total_deaths_per_million" aria-describedby="emailHelp">
             </div>
         </div>
         <div class="mb-3">
-            <label for="new_vaccinations_smoothed" class="form-label">New Vaccinations Smoothed</label>
+            <label for="new_deaths_smoothed" class="form-label">New Deaths Smoothed</label>
             <div class="d-flex">
-                <input type="text" name="new_vaccinations_smoothed" class="form-control" style="width: 30%;" id="new_vaccinations_smoothed"
+                <input type="text" name="new_deaths_smoothed" class="form-control" style="width: 30%;" id="new_deaths_smoothed"
                     aria-describedby="emailHelp">
             </div>
         </div>
@@ -76,7 +76,7 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Update Data</button>
-        <button type="button" href="#" onclick="document.location.href= '/vaccinations'" class="btn btn-primary">Back</button>
+        <button type="button" href="#" onclick="document.location.href= '/deaths'" class="btn btn-primary">Back</button>
     </form>
 </div>
 {% endblock %}

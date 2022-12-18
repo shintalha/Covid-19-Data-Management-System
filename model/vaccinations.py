@@ -1,4 +1,6 @@
 import psycopg2 as psg
+import numpy as np
+from datetime import datetime
 
 # Class for Vaccinations table
 # Connects to the db when it is constructed
@@ -8,7 +10,7 @@ class Vaccinations:
 
     # Initialize object and connect to database
     def __init__(self):
-        self.columns = ['location_id', 'total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated', 'total_boosters', 'new_vaccinations', 'new_vaccinations_smoothed', 'date_time'] # May be needed :O
+        self.columns = ['location_id', 'total_vaccinations', 'people_vaccinated', 'people_fully_vaccinated', 'total_boosters', 'new_vaccinations', 'new_vaccinations_smoothed', 'date_time'] 
         self.conn = None
         self.connect()
     
@@ -34,18 +36,71 @@ class Vaccinations:
         except:
             self.connect()
     
-    # Read a row by id
-    def read(self, id):
-        query = """SELECT * FROM VACCINATIONS AS V WHERE V.id = %(id)s;"""
+    def get_dates(self,loc,start=-1):
+        dates = np.array(self.query_dates(loc,start))
+        date_count = dates.shape[0]
+        dates_list = dates.reshape(-1,date_count)[0]
+        return [date.strftime('%Y-%m-%d') for date in dates_list if date is not None]
+    
+    def query_dates(self,loc,start):
+        loc_str = ""
+        start_str = ""
+        query = "SELECT DISTINCT date_time FROM VACCINATIONS AS V"
+        if loc != "?":
+            loc_str = " LEFT JOIN LOCATIONS AS L ON V.location_id = L.location_id WHERE country = %(loc_str)s"
+        if start != -1:
+            start = datetime.strptime(start,'%Y-%m-%d')
+            start_str = " date_time > %(start)s"
+        query += loc_str
+        if loc == "?" and start != -1:
+            query += " WHERE"
+        elif loc != "?" and start != -1:
+            query += " AND"
+        query += start_str
+        query += " ORDER BY date_time ASC;"
         self.check_conn()
         try:
-            cursor = self.conn.cursor()
-            cursor.execute(query, (id,))
-            return cursor.fetchone()
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query,{'loc_str':loc, 'start':start})
+            return self.cursor.fetchall()
         except psg.DatabaseError:  
             self.conn.rollback()
         finally:
-            cursor.close()
+            self.cursor.close()
+
+
+    def get_location_names(self):
+        loc_names = np.array(self.query_location_names())
+        loc_count = loc_names.shape[0]
+        return [name.replace(" ","_") for name in loc_names.reshape(-1,loc_count)[0] if name is not None]
+
+    def query_location_names(self):
+        query = """SELECT DISTINCT country FROM VACCINATIONS AS V 
+                LEFT JOIN LOCATIONS AS L 
+                ON V.location_id = L.location_id
+                ORDER BY country ASC"""
+        self.check_conn()
+        try:
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query)
+            return self.cursor.fetchall()
+        except psg.DatabaseError:  
+            self.conn.rollback()
+        finally:
+            self.cursor.close()
+    
+    # Read a row by id
+    def read_with_id(self, id):
+        query = """SELECT * FROM VACCINATIONS AS V WHERE V.id = %s ORDER BY V.id;"""
+        self.check_conn()
+        try:
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, (id,))
+            return self.cursor.fetchone()
+        except psg.DatabaseError:  
+            self.conn.rollback()
+        finally:
+            self.cursor.close()
 
     # Read all data
     def read(self):
@@ -60,18 +115,48 @@ class Vaccinations:
         finally:
             cursor.close()
 
+
+    def read_filter(self, limit=-1, offset=0, loc_name="?", date="?"):
+        date_str = ""
+        query = "SELECT * FROM VACCINATIONS AS V" 
+        if loc_name!="?":
+            query += " LEFT JOIN LOCATIONS AS L ON V.location_id = L.location_id WHERE country=%(loc_name)s"
+        if date!="?":
+            date_str = " date_time >= TO_DATE(%(date)s,'YYYY-MM-DD')"
+        if loc_name=="?" and date!="?":
+            query += " WHERE" + date_str
+        elif loc_name!="?" and date!="?":
+            query += " AND" + date_str
+
+        query += " ORDER BY V.id OFFSET %(offset)s"
+        if limit != -1:
+            query += " LIMIT " + str(limit)
+        query += ";"
+        self.check_conn()
+        try:
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, {"offset":str(offset),
+                                        "loc_name":loc_name,
+                                        "date":date})
+            return self.cursor.fetchall()
+        except psg.DatabaseError:  
+            self.conn.rollback()
+        finally:
+            self.cursor.close()
+
+
     # Insert a row into table
     def insert_row(self, location_id, total_vaccinations, people_vaccinated, \
          people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoothed, date_time):
         query = """INSERT INTO VACCINATIONS(location_id, total_vaccinations, people_vaccinated, 
         people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoothed, date_time) 
-        VALUES(%(iso_code)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully_vaccinated)s,
-        %(total_boosters)s, %(new_vaccinations)s, %(new_vaccinations_smoothed)s, %(date)s)""" 
+        VALUES(%(location_id)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully_vaccinated)s,
+        %(total_boosters)s, %(new_vaccinations)s, %(new_vaccinations_smoothed)s, %(date_time)s)""" 
 
         self.check_conn()
         try:
-            cursor = self.conn.cursor()
-            cursor.execute(query, {
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, {
                 'location_id': location_id,
                 'total_vaccinations': total_vaccinations,
                 'people_vaccinated': people_vaccinated,
@@ -82,23 +167,26 @@ class Vaccinations:
                 'date_time': date_time
             })
             self.conn.commit()
+            return True
         except psg.DatabaseError:  
             self.conn.rollback()
+            return False
         finally:
-            cursor.close()
+            self.cursor.close()
 
 
     #Update a row by id
-    def update(self, location_id, total_vaccinations, people_vaccinated, \
+    def update(self, id, location_id, total_vaccinations, people_vaccinated, \
          people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoothed, date_time):
-        query = """INSERT INTO VACCINATIONS(location_id, total_vaccinations, people_vaccinated, 
+        query = """UPDATE VACCINATIONS SET(location_id, total_vaccinations, people_vaccinated, 
         people_fully_vaccinated, total_boosters, new_vaccinations, new_vaccinations_smoothed, date_time) 
-        VALUES(%(iso_code)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully_vaccinated)s,
-        %(total_boosters)s, %(new_vaccinations)s, %(new_vaccinations_smoothed)s, %(date)s)""" 
+        = (%(location_id)s,%(total_vaccinations)s, %(people_vaccinated)s,%(people_fully_vaccinated)s,
+        %(total_boosters)s, %(new_vaccinations)s, %(new_vaccinations_smoothed)s, %(date_time)s) WHERE VACCINATIONS.id = %(id)s""" 
         self.check_conn()
         try:
-            cursor = self.conn.cursor()
-            cursor.execute(query, {
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, {
+                'id' : id,
                 'location_id': location_id,
                 'total_vaccinations': total_vaccinations,
                 'people_vaccinated': people_vaccinated,
@@ -109,21 +197,25 @@ class Vaccinations:
                 'date_time': date_time
             })
             self.conn.commit()
+            return True
         except psg.DatabaseError:  
             self.conn.rollback()
+            return False
         finally:
-            cursor.close()
+            self.cursor.close()
 
 
     # Delete a row by id
     def delete(self, id):
-        query = """DELETE FROM VACCINATIONS AS V WHERE V.id = %(id)s""" 
+        query = """DELETE FROM VACCINATIONS AS V WHERE V.id = %s""" 
         self.check_conn()
         try:
-            cursor = self.conn.cursor()
-            cursor.execute(query, (id,))
+            self.cursor = self.conn.cursor()
+            self.cursor.execute(query, (id,))
             self.conn.commit()
+            return True
         except psg.DatabaseError:  
             self.conn.rollback()
+            return False
         finally:
-            cursor.close()
+            self.cursor.close()
