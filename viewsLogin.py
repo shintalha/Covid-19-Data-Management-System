@@ -31,6 +31,8 @@ def login_page():
             mail = request.form["mail"]
             password = request.form["password"]
             password_2 = request.form["password2"]
+            adminPassword = request.form["adminPassword"]
+            check_adminPassword = "Bu grup 100 alacak"
             try:
                 isAdmin = "true" if request.form["isAdmin"] == 'on' else "false"
             except:
@@ -38,6 +40,9 @@ def login_page():
             if((name !="")and(surname !="")and(mail !="")and(password !="")and(password_2 !="")):
                 if password != password_2:
                     flash("These passwords are not same!")
+                    return redirect("/")
+                elif(isAdmin == "true" and adminPassword != check_adminPassword):
+                    flash("Admin password is not correct! Nice try :)")
                     return redirect("/")
                 else:
                     check=False
