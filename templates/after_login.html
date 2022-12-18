@@ -27,16 +27,15 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
         <div class="row w-100 d-flex justify-between">
-          <div class="col-8">
+          <div class="col-12">
             <div class="row d-flex">
               <a class="navbar-brand col-2 me-0" href="{{ url_for('home_page')}}"> COVID19</a>
               <a class="navbar-brand col-2 me-0" href="{{ url_for('locations_page')}}">Country Data</a>
               <a class="navbar-brand col-2 me-0" href="{{ url_for('patients_page')}}">Patients Data</a>
               <a class="navbar-brand col-2 me-0" href="{{ url_for('cases_page')}}">Cases Data</a>
               <a class="navbar-brand col-2 me-0" href="{{ url_for('tests_page')}}">Tests</a>
+              <a class="btn btn-danger col-2 me-0 justify-content-end mb-0" href="{{ url_for('login_page')}}">Log out</a>
             </div>
-          </div>
-          <div class="col-4">
           </div>
         </div>
       </div>
