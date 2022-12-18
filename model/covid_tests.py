@@ -10,8 +10,9 @@ class CovidTests:
 
     # Initialize object and connect to database
     def __init__(self):
-        self.columns = ("location_id", "total_tests", "new_tests", "total_tests_per_thousand", "new_tests_per_thousand", "new_tests_smoothed", "positive_rate", "date_time")
-        self.conn = self.connect()
+        self.columns = ["location_id", "total_tests", "new_tests", "total_tests_per_thousand", "new_tests_per_thousand", "new_tests_smoothed", "positive_rate", "date_time"]
+        self.conn = None
+        self.connect()
         self.cusor = None
     
     # Close connection to the database and destruct
