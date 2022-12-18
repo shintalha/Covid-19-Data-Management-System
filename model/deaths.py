@@ -39,7 +39,7 @@ class Deaths:
 
     #Read by id(will be used if necessary)
     def read_with_id(self, id):
-        query = """SELECT * FROM DEATHS AS V WHERE d.id = %s ORDER BY d.id;"""
+        query = """SELECT * FROM DEATHS AS d WHERE d.id = %s ORDER BY d.id;"""
         self.check_connection()
         try:
             self.cursor = self.connection.cursor()
@@ -140,7 +140,6 @@ class Deaths:
         finally:
             self.cursor.close()
             
-
 
     def get_location_names(self):
         loc_names = np.array(self.query_location_names())

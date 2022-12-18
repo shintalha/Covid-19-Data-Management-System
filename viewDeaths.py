@@ -50,13 +50,13 @@ def add_deaths_page():
     if request.method == "POST":   
         location_id = request.form["location_id"]
         total_deaths = request.form["total_deaths"]
-        new_deaths_smoothed = request.form["new_deaths_smoothed"] 
-        total_deaths_per_million = request.form["total_deaths_per_million"] if request.form["total_deaths_per_million"] !="" else None
-        new_deaths_per_million = request.form["new_deaths_per_million"] if request.form["new_deaths_per_million"] !="" else None
-        new_deaths_smoothed_per_million = request.form["new_deaths_smoothed_per_million"] if request.form["new_deaths_smoothed_per_million"] !="" else None
-        new_deaths = request.form["new_deaths"] if request.form["new_deaths"] !="" else None
+        new_deaths_smoothed = request.form["new_deaths"] 
+        total_deaths_per_million = request.form["new_deaths_smoothed"] if request.form["new_deaths_smoothed"] !="" else None
+        new_deaths_per_million = request.form["total_deaths_per_million"] if request.form["total_deaths_per_million"] !="" else None
+        new_deaths_smoothed_per_million = request.form["new_deaths_per_million"] if request.form["new_deaths_per_million"] !="" else None
+        new_deaths = request.form["new_deaths_smoothed_per_million"] if request.form["new_deaths_smoothed_per_million"] !="" else None
         date_time = request.form["date_time"] if request.form["date_time"] !="" else None
-        result = deaths.insert_row(location_id, total_deaths, new_deaths_smoothed, total_deaths_per_million, new_deaths_per_million, new_deaths_smoothed_per_million, new_deaths, date_time)
+        result = deaths.insert_row(location_id, total_deaths, new_deaths, new_deaths_smoothed, total_deaths_per_million, new_deaths_per_million, new_deaths_smoothed_per_million, date_time)
         if result:
             message = "success"  
         else:
@@ -72,11 +72,11 @@ def update_deaths_page():
     message = "empty"
     if request.method == "POST":
         total_deaths = request.form["total_deaths"] if request.form["total_deaths"] !="" else row[2]
-        new_deaths_smoothed = request.form["new_deaths_smoothed"] if request.form["new_deaths_smoothed"] !="" else row[3]
-        total_deaths_per_million = request.form["total_deaths_per_million"] if request.form["total_deaths_per_million"] !="" else row[4]
-        new_deaths_per_million = request.form["new_deaths_per_million"] if request.form["new_deaths_per_million"] !="" else row[5]
-        new_deaths_smoothed_per_million = request.form["new_deaths_smoothed_per_million"] if request.form["new_deaths_smoothed_per_million"] !="" else row[6]
-        new_deaths = request.form["new_deaths"] if request.form["new_deaths"] !="" else row[7]
+        new_deaths_smoothed = request.form["new_deaths"] if request.form["new_deaths"] !="" else row[3]
+        total_deaths_per_million = request.form["new_deaths_smoothed"] if request.form["new_deaths_smoothed"] !="" else row[4]
+        new_deaths_per_million = request.form["total_deaths_per_million"] if request.form["total_deaths_per_million"] !="" else row[5]
+        new_deaths_smoothed_per_million = request.form["new_deaths_per_million"] if request.form["new_deaths_per_million"] !="" else row[6]
+        new_deaths = request.form["new_deaths_smoothed_per_million"] if request.form["new_deaths_smoothed_per_million"] !="" else row[7]
         date_time = request.form["date_time"] if request.form["date_time"] !="" else row[8]
         result = deaths.update_row(row_id, row[1], total_deaths, new_deaths_smoothed, total_deaths_per_million, new_deaths_per_million, new_deaths_smoothed_per_million, new_deaths, date_time)
         if result:
