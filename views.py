@@ -33,4 +33,4 @@ def location_page(loc_name):
     return render_template("locations/location.html", location_info = dict(zip(locations_table.columns,loc_info)))
 
 def home_page():
-    return render_template("home.html")
+    return render_template("home.html", isHome=True)
