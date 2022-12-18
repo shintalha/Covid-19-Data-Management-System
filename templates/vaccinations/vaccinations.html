@@ -2,51 +2,87 @@
 {% block title %}Vaccinations{% endblock %}
 {% block content %}
 <script type="text/javascript">
-    function goNewDirect(pageToggle, page, loc) {
+    function goNewDirect(page, loc, date) {
 
         locStr = "";
+        dateStr = "";
         if (loc != null && loc != '')
             locStr = "&loc_name=" + loc;
-
+        if(date != null && date != '')
+            dateStr = "&date="+date; 
         if (page == null) {
-            window.location.href = "/vaccinations?page=2" + locStr;
+            window.location.href = "/vaccinations?page=1" + locStr+dateStr;
         }
-        else {
-            if (pageToggle == -1)
-                window.location.href = "/vaccinations?page=" + parseInt(page).toString() + locStr;
-            if (pageToggle == 0 && parseInt(page) - 1 >= 1) 
-                window.location.href = "/vaccinations?page=" + (parseInt(page) - 1).toString() + locStr;
-            if (pageToggle == 1)
-                window.location.href = "/vaccinations?page=" + (parseInt(page) + 1).toString() + locStr;
+        else
+        {
+            window.location.href = "/vaccinations?page="+page+locStr+dateStr;
         }
     }
 
-    function changePage(pageToggle) {
+    function changePage(pageToggle, data_available) {
         const urlStr = window.location.search;
         let urlPage = new URLSearchParams(urlStr);
+        page = urlPage.get("page");
+        if(urlPage.get("page") == null || (urlPage.get("page") == '1' && pageToggle == 0))
+            page = (1).toString();
+        else
+        {
+            if(pageToggle == 0)
+                page = (parseInt(urlPage.get("page")) - 1).toString();
+            if(pageToggle == 1)
+            {
+                if(parseInt(data_available) < 50)
+                    window.alert("No more data.");
+                else
+                    page = (parseInt(urlPage.get("page")) + 1).toString();
+            }
+            if(pageToggle == -1)
+                page = urlPage.get("page");
+        }
 
-        goNewDirect(pageToggle, urlPage.get('page'), urlPage.get("loc_name"));
+        goNewDirect(page, urlPage.get('loc_name'), urlPage.get("data"));
     }
 
-    function checkIfSelected(element) {
-        if (element.value == 'Choose...') {
-            alert("Choose !!");
+    function checkIfSelected(element)
+    {
+        if(element.value == 'Choose...')
+        {
+            if(element.id == "inputGroupSelect01")
+                alert("You didn't choose a country !!"); 
+            if(element.id == "inputGroupSelect02")
+                alert("You didn't choose a date !!"); 
             return false;
         }
         return true;
     }
+
     function filterCountry() {
         let location = document.getElementById("inputGroupSelect01");
         if (checkIfSelected(location) == false)
             return;
         const urlStr = window.location.search;
         let urlPage = new URLSearchParams(urlStr);
-
-        goNewDirect(-1, 1, location.value);
+        goNewDirect(null, location.value, urlPage.get("date"));
     }
 
-    function reset(type) {
-        document.location.href = '/vaccinations'
+    function filterDates(button)
+    {
+        if(checkIfSelected(button) == false) 
+            return;  
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+
+        goNewDirect(null, urlPage.get("loc_name"), button.value);
+    }
+
+    function reset(type)
+    {
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+        if(type == 'l')
+            goNewDirect(urlPage.get("page"), '', urlPage.get("date"));
+        if(type == 's')
+            goNewDirect(urlPage.get("page"), urlPage.get("loc_name"), '');
     }
 
     function deleteRow(row) {
@@ -58,69 +94,142 @@
             window.location.href = "/vaccinations?" + urlPage;
     }
 
+    function updateRow(row)
+    {
+        const urlStr = window.location.search;
+        let urlPage = new URLSearchParams(urlStr);
+        if(row.value == "")
+            window.location.href = "/vaccinations/"+row.value+"?"+urlPage;
+        else
+            window.location.href = "/update-vaccinations?id="+row.value;
+    }
+    
 </script>
-<div class="container">
+<div class="container">    
     <div class="row d-flex mt-2">
-        <div class="input-group col">
+        <label for="inputGroupSelect01" class="form-country">
+            <h6 style="display: inline">Choose a country: </h6>
+            <p style="display: inline" id="form-country">
+                <script>
+                    const urlStrCt = window.location.search;
+                    let urlPageCt = new URLSearchParams(urlStrCt);
+                    if(urlPageCt.get("loc_name") == null)
+                        document.getElementById("form-country").textContent = "";
+                    else
+                        document.getElementById("form-country").textContent = "Selected country > "+urlPageCt.get("loc_name");
+                </script>
+            </p>
+        </label>
+        <div class="input-group col mt-3">
             <select class="form-select" id="inputGroupSelect01" aria-label="Example select with button addon">
-                <option selected>Choose...</option>
-                {% for loc in locations%}
-                <option value={{loc}}>{{loc}}</option>
-                {% endfor %}
+              <option selected>Choose...</option>
+            {% for loc in locations%}
+               <option value={{loc}}>{{loc}}</option>
+            {% endfor %}
             </select>
-            <button class="btn btn-outline-secondary" type="button" onclick="filterCountry()">Filter</button>
-            <button class="btn btn-outline-secondary" id="resetGroupButton02" onclick="reset('l')"
-                type="button">Reset</button>
+            <button style="width: 70px;justify-content: center;" class="btn btn-outline-secondary " type="button" onclick="filterCountry()">Filter</button>
+            <button style="width: 70px;justify-content: center;" class="btn btn-outline-secondary" id="resetGroupButton02" onclick="reset('l')"
+             type="button">Reset</button>
         </div>
+
         <div class="col">
-            <button class="btn btn-outline-secondary" type="button"
-                onclick="document.location.href = '/update-vaccinations' ">Update</button>
-            <button class="btn btn-outline-secondary" type="button"
-                onclick="document.location.href = '/add-vaccinations' ">Add</button>
+            {% if is_admin %}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end mb-0">
+                    <li class="page-item"><button style="width: 132px;" class="btn btn-warning" type="button"
+                        onclick="document.location.href = '/add-vaccinations' ">Add</button></li>
+                </ul>
+            </nav>
+            {% endif %}
         </div>
+    </div>
+
+    <div class="row d-flex mt-3">
+        <label for="inputGroupSelect02" class="form-label">
+            <h6 style="display: inline;">Choose a date: </h6>
+            <p style="display: inline;" id="form-date">
+                <script>
+                    const urlStrDate = window.location.search;
+                    let urlPageDate = new URLSearchParams(urlStrDate);
+                    if(urlPageDate.get("date") == null)
+                        document.getElementById("form-date").textContent = "";
+                    else
+                        document.getElementById("form-date").textContent = "Selected date > "+urlPageDate.get("date");
+                </script>
+            </p>
+        </label>
+        <div class="input-group col mt-1">
+            <select class="form-select" id="inputGroupSelect02" aria-label="Example select with button addon">
+              <option selected>Choose...</option>
+            {% for date in dates %}
+               <option value={{date}}>{{date}}</option>
+            {% endfor %}
+            </select>
+            <button style="width: 70px;justify-content: center;" class="btn btn-outline-secondary" id="inputGroupButton02" onclick="filterDates(document.getElementById('inputGroupSelect02'))"
+             type="button">Filter</button>
+             <button style="width: 70px;justify-content: center;" class="btn btn-outline-secondary" id="resetGroupButton02" onclick="reset('s')"
+             type="button">Reset</button>
+        </div>
+
         <div class="col">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end mb-0">
-                    <li class="page-item"><button class="btn btn-outline-secondary" style="margin-right: 5px;"
-                            onclick="changePage(0)" type="button">PREV</button></li>
-                    <li class="page-item"><button class="btn btn-outline-secondary" onclick="changePage(1)"
-                            type="button">NEXT</button></li>
+                    <li class="page-item"><button class="btn btn-outline-secondary" id="prev-button" value="{{data_available}}" style="margin-right: 5px;"
+                        onclick="changePage(0,document.getElementById('prev-button').value)" type="button">PREV</button></li>
+                    <li class="page-item"><button class="btn btn-outline-secondary"  id="next-button" value="{{data_available}}" 
+                        onclick="changePage(1,document.getElementById('next-button').value)" type="button">NEXT</button></li>
                 </ul>
             </nav>
         </div>
     </div>
     <div class="row my-3 mx-0">
-        <table class="table align-middle table-striped table-hover">
+        <table class="table align-middle table-striped table-hover text-center" id="data-table">
             <thead>
-                <tr class="align-bottom">
+              <tr class="align-bottom">
 
-                    {% for head in table_headers %}
-                    <th scope="col">"{{head}}"</th>
-                    {% endfor %}
-                    <th scope="col"> </th>
-                </tr>
+                {% for head in table_headers %}
+                <th scope="col">{{head}}</th>
+                {% endfor %}
+                {% if is_admin %}
+                    <th scope="col" class="edit-buttons">Delete</th>
+                    <th scope="col" class="edit-buttons">Update</th>
+                {% endif %}
+              </tr>
             </thead>
             <tbody>
-                {% for row in table_rows%}
-                <tr class="align-items-center">
-                    {% for cell in row[1:] %}
-                    <td>
-                        <div class="data">
-                            {{cell}}
-                        </div>
-                    </td>
+                {% if data_available %}
+                    {% for row in table_rows%}
+                    <tr class="align-items-center">                    
+                        {% for cell in row[1:] %}
+                        <td class="align-items-center">
+                            <div class="data">
+                                {{cell}}
+                            </div>
+                        </td>
+                        {% endfor %}
+                        {% if is_admin %}
+                        <td class="edit-buttons">
+                            <div class="data">
+                                <button class="btn btn-outline-secondary" style="background-color: red;" href="#"
+                                        id="delete{{ row[0] }}" value="{{ row[0] }}"
+                                        onclick="deleteRow(document.getElementById('delete{{ row[0] }}'))" type="button"><i
+                                        class="bi bi-trash" style="color: white;"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="edit-buttons">
+                            <div class="data">
+                                <button class="btn btn-outline-secondary" type="button"
+                                href="#" id="update{{ row[0] }}" value="{{ row[0] }}"
+                                onclick="updateRow(document.getElementById('update{{ row[0] }}'))" "><i
+                                class="bi-arrow-right" style="color: blue;"></i>
+                                </button>
+                            </div>
+                        </td>
+                        {% endif %}
+                    </tr>
                     {% endfor %}
-                    <td>
-                        <div class="data">
-                            <button class="btn btn-outline-secondary" style="background-color: red;" href="#"
-                                id="delete{{ row[0] }}" value="{{ row[0] }}"
-                                onclick="deleteRow(document.getElementById('delete{{ row[0] }}'))" type="button"><i
-                                    class="bi bi-trash" style="color: white;"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
+                {% endif %}
             </tbody>
         </table>
     </div>
