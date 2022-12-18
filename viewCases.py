@@ -63,7 +63,7 @@ def update_cases_page(id = -1):
         return redirect("/")
 
     if isAdmin is False:
-        return redirect("/")
+        return redirect("/cases")
     
     message = "empty"
     updateData = None
@@ -100,7 +100,7 @@ def add_cases_page():
         return redirect("/")
 
     if isAdmin is False:
-        return redirect("/")
+        return redirect("/cases")
     
     message = "empty"
 
