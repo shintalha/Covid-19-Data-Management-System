@@ -4,7 +4,7 @@ import psycopg2
 def insert_row(cols: list, conn, cursor):
     dataset_df = pd.read_csv("setup/dataset.csv")
     dataset_df = dataset_df.loc[:,cols].drop_duplicates()
-    dataset_df = dataset_df[dataset_df.iso_code.apply(lambda row : row.split("_")[0]!="OWID")]
+    dataset_df = dataset_df[dataset_df.iso_code.apply(lambda row : row.split("_")[0]!="OWID")].dropna()
     # Sütun sayısı kadar %s ekle
     query = """INSERT INTO COVID_TESTS(location_id, total_tests, new_tests,total_tests_per_thousand,new_tests_per_thousand,new_tests_smoothed,positive_rate,date_time) 
                 VALUES(%(iso_code)s,%(total_tests)s,
@@ -24,7 +24,11 @@ conn = psycopg2.connect(database="postgres",
                         user="postgres",
                         password="1234",
                         port="5432")
+
+queryTable = """DROP TABLE IF EXISTS COVID_TESTS;"""
 cursor = conn.cursor()
+cursor.execute(queryTable)
+conn.commit()
 
 queryTable = """CREATE TABLE COVID_TESTS (
     id SERIAL PRIMARY KEY,
@@ -37,7 +41,7 @@ queryTable = """CREATE TABLE COVID_TESTS (
     positive_rate NUMERIC,
     date_time DATE    
 );"""
-
+cursor = conn.cursor()
 cursor.execute(queryTable)
 conn.commit()
 insert_row(["iso_code","total_tests","new_tests","total_tests_per_thousand","new_tests_per_thousand", "new_tests_smoothed", "positive_rate", "date"], conn, cursor)

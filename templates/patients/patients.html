@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row my-2 d-flex justify-content-between">
-        <h3 class="fw-bold text-info col-4">Patients</h3>
+        <h3 class="fw-bold text-secondary col-4">Patients</h3>
         {% if isadmin == True %}
         <div class="col-2">
             <a href="/patients/edit" role="button" aria-pressed="true"
@@ -21,9 +21,9 @@
     {% endif %}
     {% endwith %}
     <div class="row">
-        <div class="col-6">
+        <div class="col-6"style="width: 100%;">
             <div class="row justify-content-start align-items-center">
-                <div class="col-6">
+                <div class="col-4" style="width: 33%;">
                     <select id="sel_country" class="form-select" name="country" aria-label=".form-select-sm example">
                         {% if countries %}
 
@@ -34,49 +34,24 @@
                         {% endif %}
                     </select>
                 </div>
-                <div class="col-4">
-                    <button type="button" id="filter1" class="btn btn-primary w-100 my-3"><a
+                <div class="col-4"style="width: 34%;">
+                    <input type="text" name="date" class="form-control" id="date" placeholder="Please enter date in 'YYYY-MM-DD' format">
+                </div>
+                <div class="col-4"style="width: 33%;">
+                    <button type="button" id="filter1" class="btn btn-secondary w-100 my-3"><a
                             class="link-light text-decoration-none" id="Filter" href="#">Filter</a></button>
                     <script>
                         document.querySelector("#filter1").addEventListener("click", function () {
                             Filter = document.getElementById("Filter")
                             country = document.getElementById("sel_country").value
+                            date = document.getElementById("date").value
                             Filter.href = "/patients?"
-                            Filter.href += "countryName=" + country
+                            Filter.href += "countryName=" + country + "&dateVariable=" + date
                             window.location.replace(Filter.href)
                         });
                     </script>
                 </div>
             </div>
-        </div>
-
-        <div class="col-6">
-            <nav aria-label="Page navigation" class="row h-100 d-flex align-items-center">
-                <ul class="pagination justify-content-end mb-0">
-                    <li id="4" class="page-item"><a class="page-link">first</a></li>
-                    <li id="1" class="page-item"><a class="page-link">{{paginationValues[0]}}</a></li>
-                    <li id="2" class="page-item"><a class="page-link">{{paginationValues[1]}}</a></li>
-                    <li id="3" class="page-item"><a class="page-link">{{paginationValues[2]}}</a></li>
-                    <script>
-                        l1 = document.getElementById("1")
-                        l2 = document.getElementById("2")
-                        l3 = document.getElementById("3")
-                        l4 = document.getElementById("4")
-
-                        let params = (new URL(document.location)).searchParams;
-                        let name = params.get("countryName");
-                        let url = "/patients?"
-
-                        if (name != null) {
-                            url = url + "countryName=" + name + "&"
-                        }
-                        l1.firstChild.href = url + "pageNumber=" + l1.firstChild.innerText
-                        l2.firstChild.href = url + "pageNumber=" + l2.firstChild.innerText
-                        l3.firstChild.href = url + "pageNumber=" + l3.firstChild.innerText
-                        l4.firstChild.href = url + "pageNumber=1"
-                    </script>
-                </ul>
-            </nav>
         </div>
     </div>
     <div class="row my-3 mx-0">
@@ -105,6 +80,36 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <nav aria-label="Page navigation" class="row h-100 d-flex align-items-center">
+                <ul class="pagination justify-content-end mb-0">
+                    <li id="4" class="page-item"><a class="btn btn-outline-secondary w-100">first</a></li>
+                    <li id="1" class="page-item"><a class="btn btn-outline-secondary w-100">{{paginationValues[0]}}</a></li>
+                    <li id="2" class="page-item"><a class="btn btn-outline-secondary w-100">{{paginationValues[1]}}</a></li>
+                    <li id="3" class="page-item"><a class="btn btn-outline-secondary w-100">{{paginationValues[2]}}</a></li>
+                    <script>
+                        l1 = document.getElementById("1")
+                        l2 = document.getElementById("2")
+                        l3 = document.getElementById("3")
+                        l4 = document.getElementById("4")
+
+                        let params = (new URL(document.location)).searchParams;
+                        let name = params.get("countryName");
+                        let url = "/patients?"
+
+                        if (name != null) {
+                            url = url + "countryName=" + name + "&"
+                        }
+                        l1.firstChild.href = url + "pageNumber=" + l1.firstChild.innerText
+                        l2.firstChild.href = url + "pageNumber=" + l2.firstChild.innerText
+                        l3.firstChild.href = url + "pageNumber=" + l3.firstChild.innerText
+                        l4.firstChild.href = url + "pageNumber=1"
+                    </script>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

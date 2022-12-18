@@ -1,29 +1,37 @@
-from flask import render_template, flash, request
+from flask import render_template, flash, request, session
 from werkzeug.utils import redirect
 import numpy as np
 from datetime import datetime
 
 from model.locations import *
+from model.user import *
 from model.hospital_and_icu import *
 
 def patients_page():
     connection = hospital_and_icu()
     #pagination
     countryName = request.args.get("countryName")
+    dateFilter = request.args.get("dateVariable")
     pageNumber =request.args.get("pageNumber") if request.args.get("pageNumber") is not None else "1"
     pageNumber = int(pageNumber)
     offset = (pageNumber-1)*50
     paginationValues = (pageNumber,pageNumber+1,pageNumber+2) if (pageNumber)>0 else (0,1,2)
 
     location = Locations()
-    countries = location.get_country_names()
+    countries = connection.get_country_names()
     patients = None
     isadmin = False
+    user_id = str(session["id"])
+    if user_id is not None:
+        user = User()
+        isadmin = user.isAdmin(user_id)
     headings = ("icu_patients", "icu_patients_per_million","hosp_patients" ,"hosp_patients_per_million" , "weekly_icu_admissions" ,"weekly_icu_admissions_per_million" ,"weekly_hosp_admissions" ,"weekly_hosp_admissions_per_million")
-    isadmin = True
-    if(countryName is not None):
+    if(countryName is not None and dateFilter ==''):
         country_id = location.get_id_by_country_name(countryName)
         result = connection.selectFromLOC(country_id[0], offset)
+    elif(countryName is not None and dateFilter is not None):
+        country_id = location.get_id_by_country_name(countryName)
+        result = connection.selectFromLOCandDate(country_id[0], dateFilter)
     else:
         result = connection.selectAll(offset)
     patients = np.zeros([1, 10], dtype='str')
@@ -149,25 +157,28 @@ def edit_patients_page():
     connection = hospital_and_icu()
     #pagination
     countryName = request.args.get("countryName")
+    dateFilter = request.args.get("dateVariable")
     pageNumber =request.args.get("pageNumber") if request.args.get("pageNumber") is not None else "1"
     pageNumber = int(pageNumber)
     offset = (pageNumber-1)*50
     paginationValues = (pageNumber,pageNumber+1,pageNumber+2) if (pageNumber)>0 else (0,1,2)
-    if(request.method == "POST"):
-        dateForDelete = request.form["del_date"] if request.form["del_date"] !="" else "NULL"
-        countryNameforDelete = request.form["del_country"] if request.form["del_country"] !="" else "NULL"
-        delete_patients(countryNameforDelete, dateForDelete)
+    if(request.args.get("deleteMode") == "on"):
+        if(countryName != '' and dateFilter != ''):
+            delete_patients(countryName, dateFilter)
+        else:
+            flash("For delete operation, Date or Country field cannot be blank!")
         return redirect("/patients/edit")
     else:
         location = Locations()
-        countries = location.get_country_names()
+        countries = connection.get_country_names()
         patients = None
-        isadmin = False
         headings = ("icu_patients", "icu_patients_per_million","hosp_patients" ,"hosp_patients_per_million" , "weekly_icu_admissions" ,"weekly_icu_admissions_per_million" ,"weekly_hosp_admissions" ,"weekly_hosp_admissions_per_million")
-        isadmin = True
-        if(countryName is not None):
+        if(countryName is not None and dateFilter ==''):
             country_id = location.get_id_by_country_name(countryName)
             result = connection.selectFromLOC(country_id[0], offset)
+        elif(countryName is not None and dateFilter is not None):
+            country_id = location.get_id_by_country_name(countryName)
+            result = connection.selectFromLOCandDate(country_id[0], dateFilter)
         else:
             result = connection.selectAll(offset)
         patients = np.zeros([1, 10], dtype='str')
@@ -177,13 +188,12 @@ def edit_patients_page():
                 patients = np.vstack([patients, newRow])
 
         patients = np.delete(patients, 0, 0)
-        return render_template("patients/edit-patients.html",headings=headings, isadmin=isadmin,  patients=patients, countries=countries, paginationValues=paginationValues)
+        return render_template("patients/edit-patients.html",headings=headings,  patients=patients, countries=countries, paginationValues=paginationValues)
 
-def delete_patients(country_name,date):
+def delete_patients(country_id,date):
     connection = hospital_and_icu()
     loc_con = Locations()
-    country_id = loc_con.get_id_by_country_name(country_name)
-    check = connection.selectFromLOCandDate(country_id[0], date)
+    check = connection.selectFromLOCandDateReturnID(country_id, date)
     if(check is not None):
         connection.delete(check)
     else:
