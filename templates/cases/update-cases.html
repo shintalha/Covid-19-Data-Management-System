@@ -39,61 +39,41 @@
         </div>
         <div class="mb-3">
             <label for="location_id" class="form-label">Location Id</label>
-            <div class="d-flex">
-                <input type="text" name="location_id" class="form-control" style="width: 30%;" id="location_id"
-                    aria-describedby="emailHelp">
-                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[1]}}</label>
-            </div>
+            <input type="text" name="location_id" placeholder="{{data[1]}}" class="form-control" style="width: 30%;"
+                id="location_id" aria-describedby="emailHelp">
 
         </div>
         <div class="mb-3">
             <label for="total_cases" class="form-label">Total Cases</label>
-            <div class="d-flex">
-                <input type="text" name="total_cases" class="form-control" style="width: 30%;" id="total_cases"
-                    aria-describedby="emailHelp">
-                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[2]}}</label>
-            </div>
+            <div class="d-flex"> <input type="text" name="total_cases" placeholder="{{data[2]}}" class="form-control"
+                    style="width: 30%;" id="total_cases" aria-describedby="emailHelp">
 
-        </div>
-        <div class="mb-3">
-            <label for="new_cases" class="form-label">New Cases</label>
-            <div class="d-flex">
-                <input type="text" name="new_cases" class="form-control" style="width: 30%;" id="new_cases"
-                    aria-describedby="emailHelp">
-                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[3]}}</label>
             </div>
-        </div>
-        <div class="mb-3">
-            <label for="total_cases_per_million" class="form-label">Total Cases Per Million</label>
-            <div class="d-flex">
-                <input type="text" name="total_cases_per_million" class="form-control" style="width: 30%;"
-                    id="total_cases_per_million" aria-describedby="emailHelp">
-                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[4]}}</label>
+            <div class="mb-3">
+                <label for="new_cases" class="form-label">New Cases</label>
+                <input type="text" name="new_cases" placeholder="{{data[3]}}" class="form-control" style="width: 30%;"
+                    id="new_cases" aria-describedby="emailHelp">
             </div>
-        </div>
-        <div class="mb-3">
-            <label for="new_cases_per_million" class="form-label">New Cases Per Million</label>
-            <div class="d-flex">
-                <input type="text" name="new_cases_per_million" class="form-control" style="width: 30%;"
-                    id="new_cases_per_million" aria-describedby="emailHelp">
-                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[5]}}</label>
+            <div class="mb-3">
+                <label for="total_cases_per_million" class="form-label">Total Cases Per Million</label>
+                <input type="text" name="total_cases_per_million" placeholder="{{data[4]}}" class="form-control"
+                    style="width: 30%;" id="total_cases_per_million" aria-describedby="emailHelp">
             </div>
-        </div>
-        <div class="mb-3">
-            <label for="new_cases_smoothed" class="form-label">New Cases Smoothed Per Million</label>
-            <div class="d-flex">
-                <input type="text" name="new_cases_smoothed_per_million" class="form-control" style="width: 30%;"
-                    id="new_cases_smoothed_per_million" aria-describedby="emailHelp">
-                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[6]}}</label>
+            <div class="mb-3">
+                <label for="new_cases_per_million" class="form-label">New Cases Per Million</label>
+                <input type="text" name="new_cases_per_million" placeholder="{{data[5]}}" class="form-control"
+                    style="width: 30%;" id="new_cases_per_million" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="new_cases_smoothed" class="form-label">New Cases Smoothed Per Million</label>
+                <input type="text" name="new_cases_smoothed_per_million" placeholder="{{data[6]}}" class="form-control"
+                    style="width: 30%;" id="new_cases_smoothed_per_million" aria-describedby="emailHelp">
             </div>
         </div>
         <div class="mb-3">
             <label for="new_cases_smoothed_per_million" class="form-label">Date (yyyy-mm-dd)</label>
-            <div class="d-flex">
-                <input type="text" name="date_time" class="form-control" style="width: 30%;" id="date_time"
-                    aria-describedby="emailHelp">
-                <label for="date" class="form-label" style="margin-left: 10px;">Old Value: {{data[7]}}</label>
-            </div>
+            <input type="text" name="date_time" placeholder="{{data[7]}}" class="form-control" style="width: 30%;"
+                id="date_time" aria-describedby="emailHelp">
         </div>
         <button type="submit" class="btn btn-primary">Update Data</button>
     </form>
