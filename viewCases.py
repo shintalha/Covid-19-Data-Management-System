@@ -1,13 +1,22 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, session, redirect
 import numpy as np
 from model.locations import Locations
 from model.cases import cases
-
+from model.user import *
 
 # cases
 def cases_page(id = -1):
-    if id != -1:
+    user_id = str(session["id"])
+    isAdmin = False
+    if user_id is not None and user_id != "None":
+         user = User()
+         isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+    
+    if id != -1 and isAdmin:
         cases.delete(int(id))
+
     locations = Locations()    
     pageNumber = int(request.args.get('page')) if request.args.get('page') is not None else 1
     countryName = request.args.get('loc_name') if request.args.get('loc_name') is not None else "?"
@@ -40,9 +49,22 @@ def cases_page(id = -1):
         casesData = np.vstack([casesData, newRow])
 
     casesData = np.delete(casesData, 0, 0)
-    return render_template("cases/cases.html", table_headers=headings, locations=countriesData, table_rows=casesData)
+    return render_template("cases/cases.html", table_headers=headings, locations=countriesData, table_rows=casesData, isAdmin=isAdmin)
 
 def update_cases_page(id = -1):
+    user_id = str(session["id"])
+    isAdmin = False
+    user_id = str(session["id"])
+    isAdmin = False
+    if user_id is not None and user_id != "None":
+         user = User()
+         isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+
+    if isAdmin is False:
+        return redirect("/")
+    
     message = "empty"
     updateData = None
 
@@ -67,6 +89,19 @@ def update_cases_page(id = -1):
     return render_template("cases/update-cases.html", data=updateData, message=message)
 
 def add_cases_page():
+    user_id = str(session["id"])
+    isAdmin = False
+    user_id = str(session["id"])
+    isAdmin = False
+    if user_id is not None and user_id != "None":
+         user = User()
+         isadmin = user.isAdmin(user_id)
+    else:
+        return redirect("/")
+
+    if isAdmin is False:
+        return redirect("/")
+    
     message = "empty"
 
     if request.method == "POST":   
