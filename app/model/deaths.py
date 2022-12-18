@@ -227,15 +227,3 @@ class Deaths:
         finally:
             self.cursor.close()        
 
-
-    def readFid(self, id):
-        query = """SELECT * FROM DEATHS AS dt WHERE dt.id = %s ORDER BY dt.id;"""
-        self.check_connection()
-        try:
-            self.cursor = self.connection.cursor()
-            self.cursor.execute(query, (id,))
-            return self.cursor.fetchone()
-        except ps.DatabaseError:  
-            self.connection.rollback()
-        finally:
-            self.cursor.close()
