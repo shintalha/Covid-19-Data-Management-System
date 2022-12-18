@@ -1,6 +1,7 @@
 {% extends "after_login.html" %}
 {% block title %}Test{% endblock %}
 {% block content %}
+
 <script type="text/javascript">
     function goNewDirect(page, loc, date)
     {
@@ -131,12 +132,14 @@
         </div>
 
         <div class="col">
+            {% if is_admin %}
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end mb-0">
                     <li class="page-item"><button style="width: 132px;" class="btn btn-warning" type="button"
                         onclick="document.location.href = '/add-tests' ">Add</button></li>
                 </ul>
             </nav>
+            {% endif %}
         </div>
     </div>
 
@@ -179,15 +182,17 @@
         </div>
     </div>
     <div class="row my-3 mx-0">
-        <table class="table align-middle table-striped table-hover" id="data-table">
+        <table class="table align-middle table-striped table-hover text-center" id="data-table">
             <thead>
               <tr class="align-bottom">
 
                 {% for head in table_headers %}
-                <th scope="col">"{{head}}"</th>
+                <th scope="col">{{head}}</th>
                 {% endfor %}
-                <th scope="col"> </th>
-                <th scope="col"> </th>
+                {% if is_admin %}
+                    <th scope="col" class="edit-buttons">Delete</th>
+                    <th scope="col" class="edit-buttons">Update</th>
+                {% endif %}
               </tr>
             </thead>
             <tbody>
@@ -195,13 +200,14 @@
                     {% for row in table_rows%}
                     <tr class="align-items-center">                    
                         {% for cell in row[1:] %}
-                        <td>
+                        <td class="align-items-center">
                             <div class="data">
                                 {{cell}}
                             </div>
                         </td>
                         {% endfor %}
-                        <td>
+                        {% if is_admin %}
+                        <td class="edit-buttons">
                             <div class="data">
                                 <button class="btn btn-outline-secondary" style="background-color: red;" href="#"
                                         id="delete{{ row[0] }}" value="{{ row[0] }}"
@@ -210,7 +216,7 @@
                                 </button>
                             </div>
                         </td>
-                        <td>
+                        <td class="edit-buttons">
                             <div class="data">
                                 <button class="btn btn-outline-secondary" type="button"
                                 href="#" id="update{{ row[0] }}" value="{{ row[0] }}"
@@ -219,6 +225,7 @@
                                 </button>
                             </div>
                         </td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 {% endif %}
