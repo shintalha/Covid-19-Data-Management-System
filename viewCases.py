@@ -10,7 +10,7 @@ def cases_page(id = -1):
     isAdmin = False
     if user_id is not None and user_id != "None":
          user = User()
-         isadmin = user.isAdmin(user_id)
+         isAdmin = user.isAdmin(user_id)
     else:
         return redirect("/")
     
@@ -26,7 +26,7 @@ def cases_page(id = -1):
 
     countries = None
     casesData = None
-    headings = ["Location Id", "Total Cases", "New Cases", "Total Cases PM",
+    headings = ["ID", "Location Id", "Total Cases", "New Cases", "Total Cases PM",
                 "New Cases PM", "New Cases SPM", "Date"]
 
     countries = locations.get_country_names()
@@ -54,11 +54,9 @@ def cases_page(id = -1):
 def update_cases_page(id = -1):
     user_id = str(session["id"])
     isAdmin = False
-    user_id = str(session["id"])
-    isAdmin = False
     if user_id is not None and user_id != "None":
          user = User()
-         isadmin = user.isAdmin(user_id)
+         isAdmin = user.isAdmin(user_id)
     else:
         return redirect("/")
 
@@ -66,20 +64,21 @@ def update_cases_page(id = -1):
         return redirect("/cases")
     
     message = "empty"
-    updateData = None
-
+    updateData = ["","","","","","","",""]
     if id != -1:
         updateData = cases.findById(id=id)
 
-    if request.method == "POST":   
-        cases_id = request.form["cases_id"]
-        location_id = request.form["location_id"]
-        total_cases = request.form["total_cases"]
-        new_cases = request.form["new_cases"]
-        total_cases_per_million = request.form["total_cases_per_million"] if request.form["total_cases_per_million"] !="" else "NULL"
-        new_cases_per_million = request.form["new_cases_per_million"] if request.form["new_cases_per_million"] !="" else "NULL"
-        new_cases_smoothed_per_million = request.form["new_cases_smoothed_per_million"] if request.form["new_cases_smoothed_per_million"] !="" else "NULL"
-        date_time = request.form["date_time"]
+    if request.method == "POST": 
+        if request.form["cases_id"] !="":
+            updateData = cases.findById(id=request.form["cases_id"])
+        cases_id = request.form["cases_id"] 
+        location_id = request.form["location_id"] if request.form["location_id"] !="" else  updateData[1]
+        total_cases = request.form["total_cases"] if request.form["total_cases"] !="" else  updateData[2]
+        new_cases = request.form["new_cases"] if request.form["new_cases"] !="" else  updateData[3]
+        total_cases_per_million = request.form["total_cases_per_million"] if request.form["total_cases_per_million"] !="" else  updateData[4]
+        new_cases_per_million = request.form["new_cases_per_million"] if request.form["new_cases_per_million"] !="" else  updateData[5]
+        new_cases_smoothed_per_million = request.form["new_cases_smoothed_per_million"] if request.form["new_cases_smoothed_per_million"] !="" else  updateData[6]
+        date_time = request.form["date_time"] if request.form["date_time"] !="" else  updateData[7]
         result = cases.update(cases_id, location_id, total_cases, new_cases, total_cases_per_million, new_cases_per_million, new_cases_smoothed_per_million, date_time)
         if result:
             message = "success"  
@@ -91,11 +90,9 @@ def update_cases_page(id = -1):
 def add_cases_page():
     user_id = str(session["id"])
     isAdmin = False
-    user_id = str(session["id"])
-    isAdmin = False
     if user_id is not None and user_id != "None":
          user = User()
-         isadmin = user.isAdmin(user_id)
+         isAdmin = user.isAdmin(user_id)
     else:
         return redirect("/")
 

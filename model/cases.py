@@ -123,7 +123,7 @@ class cases:
             connection.close()
 
     def Get100ByOffset(offset):
-        query = """SELECT * FROM CASES OFFSET %s ROWS FETCH FIRST 100 ROW ONLY""" 
+        query = """SELECT * FROM CASES ORDER BY CASES.id OFFSET %s ROWS FETCH FIRST 100 ROW ONLY""" 
         connection = cases.connect()
         try:
             cursor = connection.cursor()
@@ -136,7 +136,7 @@ class cases:
             connection.close()
     
     def Get100ByOffsetAndCountry(country, offset):
-        query = """SELECT * FROM CASES WHERE CASES.location_id = %s OFFSET %s ROWS FETCH FIRST 100 ROW ONLY""" 
+        query = """SELECT * FROM CASES WHERE CASES.location_id = %s ORDER BY CASES.id OFFSET %s ROWS FETCH FIRST 100 ROW ONLY""" 
         connection = cases.connect()
         try:
             cursor = connection.cursor()
