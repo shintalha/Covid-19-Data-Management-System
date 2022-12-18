@@ -8,7 +8,6 @@ class User:
         self.columns = ['name', 'surname', 'email', 'password', 'admin']
         self.connection = None
         self.connect()
-        isAdmin = False
     
     # Close connection to the database and destruct
     def __del__(self):
@@ -90,11 +89,12 @@ class User:
             cursor = self.connection.cursor()
             cursor.execute(query)
             result = cursor.fetchone()
+            return result[0]
         except psycopg2.DatabaseError:  
             self.connection.rollback()
             result = None
+            return result
         finally:
             cursor.close()
-            return result[0]
         
         

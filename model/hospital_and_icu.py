@@ -191,3 +191,16 @@ class hospital_and_icu:
         finally:
             cursor.close()
             return True if result is not None and result[0]>0 else False
+        
+    def get_country_names(self):
+        query = """SELECT distinct L.country FROM hospital_and_icu as H left join locations as L on(h.location_id = L.location_id)
+                   order by 1;""" 
+        self.connect()
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query)
+            return cursor.fetchall()
+        except psycopg2.DatabaseError:  
+            self.connection.rollback()
+        finally:
+            cursor.close()
